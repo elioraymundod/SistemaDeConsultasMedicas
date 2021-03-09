@@ -7,6 +7,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DemoMaterialModule } from './angular-material';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreacionSolicitudComponent } from './creacion-solicitud/creacion-solicitud.component';
+import { CatalogosService } from './Services/catalogos.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -18,9 +20,12 @@ import { CreacionSolicitudComponent } from './creacion-solicitud/creacion-solici
     AppRoutingModule,
     BrowserAnimationsModule,
     DemoMaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    CatalogosService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

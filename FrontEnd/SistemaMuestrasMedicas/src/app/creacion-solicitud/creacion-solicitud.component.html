@@ -12,8 +12,8 @@
                             <mat-form-field appearance="fill" class="col-lg-4 col-md-4 col-sm-12">
                                 <mat-label>Tipo Solicitante</mat-label>
                                 <mat-select formControlName = "tipoSolicitanteFormControl">
-                                  <mat-option *ngFor="let opcion of tipoSolicitante" [value]="opcion.value">
-                                    {{opcion.viewValue}}
+                                  <mat-option *ngFor="let opcion of tipoSolicitante" [value]="opcion.codigo_dato_catalogo">
+                                    {{opcion.nombre}}
                                   </mat-option>
                                 </mat-select>
                             </mat-form-field>

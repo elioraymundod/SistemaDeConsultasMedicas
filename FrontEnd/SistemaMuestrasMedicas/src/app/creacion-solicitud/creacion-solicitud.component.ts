@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { CatalogosService } from '../Services/catalogos.service';
 
 interface Opciones {
   value: string;
@@ -15,8 +17,11 @@ export class CreacionSolicitudComponent implements OnInit {
 
   isLinear = false;
   crearSolicitudFormGroup: FormGroup;
+  tipoSolicitante: any;
 
-  constructor(private _formBuilder: FormBuilder) {
+  constructor(private _formBuilder: FormBuilder, 
+              private catalogosService: CatalogosService,
+              private activatedRoute: ActivatedRoute) {
     this.crearSolicitudFormGroup = this._formBuilder.group({
       tipoSolicitanteFormControl: ['', [Validators.required]],
       tipoSolicitudFormControl: ['', [Validators.required]],
@@ -25,16 +30,16 @@ export class CreacionSolicitudComponent implements OnInit {
       nitFormControl: ['', []],
       nombreFormControl: ['', []]
     });
+
+
    }
 
   ngOnInit(): void {
-    
+    this.catalogosService.getTipoSolicitante().subscribe(res => {
+      this.tipoSolicitante = res;
+      console.log(this.tipoSolicitante)
+    })
   }
-
-  tipoSolicitante: Opciones[] = [
-    {value: '1', viewValue: 'IN-Usuario interno'},
-    {value: '2', viewValue: 'EX-Usuario externo'}
-  ];
 
   tipoSolicitud: Opciones[] = [
     {value: '1', viewValue: 'MM-Muestra medica'},
