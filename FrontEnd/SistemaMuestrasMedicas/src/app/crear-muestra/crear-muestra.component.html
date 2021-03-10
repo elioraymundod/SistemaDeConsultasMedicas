@@ -1,0 +1,72 @@
+<div class="card-body">
+    <mat-card-title class="titulo">Creacion de Muestra</mat-card-title>
+
+    <mat-card class="margenArriba">
+        <mat-horizontal-stepper [linear]="isLinear" #stepper>
+            <!--Informacion creacion solicitud -->
+             <mat-step [stepControl]="crearMuestraFormGroup">
+                <form [formGroup]="crearMuestraFormGroup">
+                           <ng-template matStepLabel>Creacion de Muestra</ng-template>
+                     <div class="container">
+                        <!--Inicia primer row -->
+                        <div class="row"> 
+                                <!--Desplegable tipo muestra-->
+                            <mat-form-field appearance="fill" class="col-lg-4 col-md-4 col-sm-12">
+                                <mat-label>Tipo Muestra</mat-label>
+                                <mat-select formControlName= "tipoMuestraFormControl">
+                                  <mat-option *ngFor="let opcion of tipoMuestra" [value]="opcion.value">
+                                    {{opcion.viewValue}}
+                                  </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                                <!--campo para rellenar cantidad unidades -->
+                            <mat-form-field class="col-lg-4 col-md-4 col-sm-12">
+                                <mat-label>Cantidad Unidades</mat-label>
+                             <input matInput #noExpediente placeholder="1234" maxlength="4" formControlName="cantidadFormControl">
+                                <mat-hint align="end">{{noExpediente.value.length}} / 4</mat-hint>
+                            </mat-form-field>
+                                <!--Desplegable unidad de medida -->
+                            <mat-form-field appearance="fill" class="col-lg-4 col-md-4 col-sm-12">
+                                <mat-label>Unidad de medida</mat-label>
+                                <mat-select formControlName="cantidadMuestraFormControl">
+                                  <mat-option *ngFor="let opcion of cantidadUnidades" [value]="opcion.value">
+                                    {{opcion.viewValue}}
+                                  </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <!--Inicia segundo Row -->
+                        <div class="row"> 
+                            <mat-form-field class="col-lg-8 col-md-8 col-sm-12">
+                                <mat-label>Presentacion</mat-label>
+                                <textarea matInput #descripcion
+                                formControlName="PresentacionFormControl" class="tamanioTextArea"
+                                    maxlength="2000"></textarea>
+                                <mat-hint align="end">{{descripcion.value.length}} / 2000</mat-hint>
+                            </mat-form-field>   
+                                <!--Espacio para adjuntar archivo--> 
+                            <mat-form-field class="col-lg-4 col-md-4 col-sm-12">
+                                <mat-label>Adjuntar Archivo</mat-label>
+                             <input matInput #noExpediente placeholder="Adjunte su archivo PDF aqui.!" >
+                            </mat-form-field>
+                        </div>
+                             <!--Inicia tercer Row -->
+                        <div class="row">
+                            --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                            <div>
+                                <button mat-raised-button matStepperNext class="botones margenBotones" type="button"  >
+                                     Atras
+                                </button>
+                            </div>
+                            -
+                             <div>
+                                <button mat-raised-button matStepperNext class="botones margenBotones" type="button"
+                                [disabled]="crearMuestraFormGroup.invalid">Siguiente</button>
+                            </div>
+                        </div>
+                     </div>
+                 </form>
+            </mat-step>
+        </mat-horizontal-stepper>
+    </mat-card>
+</div>

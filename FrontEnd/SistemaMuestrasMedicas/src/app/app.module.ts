@@ -9,11 +9,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CreacionSolicitudComponent } from './creacion-solicitud/creacion-solicitud.component';
 import { CatalogosService } from './Services/catalogos.service';
 import { HttpClientModule } from '@angular/common/http';
+import { CrearMuestraComponent } from './crear-muestra/crear-muestra.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CreacionSolicitudComponent
+    CreacionSolicitudComponent,
+    CrearMuestraComponent 
   ],
   imports: [
     BrowserModule,
