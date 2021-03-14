@@ -16,6 +16,35 @@ router.get('/tipoSolicitante',(req,res)=>{
 
 });
 
+router.get('/tipoMuestra',(req,res)=>{
+    catalogos.getTipoMuestra()
+                    .then(catalogos=>{
+                        res.status(200).send(catalogos);
+                    })
+                    .catch(err=>{
+                        console.error(err);
+                        res.status(500).send({
+                            mesage:'Error al obtener datos'
+                        });
+                    });
+
+});
+
+
+router.get('/unidadDeMedida',(req,res)=>{
+    catalogos.getUnidadDeMedida()
+                    .then(catalogos=>{
+                        res.status(200).send(catalogos);
+                    })
+                    .catch(err=>{
+                        console.error(err);
+                        res.status(500).send({
+                            mesage:'Error al obtener datos'
+                        });
+                    });
+
+});
+
 
 
 

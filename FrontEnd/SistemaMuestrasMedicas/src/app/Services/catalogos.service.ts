@@ -21,4 +21,8 @@ export class CatalogosService {
     return this.http.get<any>(`${this.baseUrl}/tipoMuestra`)
   }
 
+  public getUnidadDeMedida(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/unidadDeMedida`)
+  }
+
 }

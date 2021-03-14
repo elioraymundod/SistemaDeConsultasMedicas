@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
 import { CatalogosService } from '../Services/catalogos.service';
 
 interface Opciones{
@@ -17,6 +18,7 @@ export class CrearMuestraComponent implements OnInit {
   isLinear=false;
   crearMuestraFormGroup: FormGroup;
   listaTipoMuestra: any;
+  listaUnidadDeMedida: any;
 
   constructor(private _formBuilder: FormBuilder, 
               private servicios: CatalogosService) {
@@ -31,15 +33,20 @@ export class CrearMuestraComponent implements OnInit {
   ngOnInit(): void {
     this.servicios.getTipoMuestra().subscribe(res => {
       this.listaTipoMuestra=res; 
-      console.log(this.listaTipoMuestra)
+    });
+
+    this.servicios.getUnidadDeMedida().subscribe(res => {
+      this.listaUnidadDeMedida = res;
+      console.log(this.listaUnidadDeMedida)
     })
+
   }
 
-  
-
-  cantidadUnidades: Opciones[] = [
-    {value: '1', viewValue: 'Gramos '},
-    {value: '2', viewValue: 'Miligramos'}
-  ];
+  guardarDatos() {
+    Swal.fire({
+      icon: 'success',
+      title: 'Muestra creada correctamente',
+    })
+  }
 
 }

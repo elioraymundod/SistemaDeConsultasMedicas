@@ -22,7 +22,6 @@ app.use(cors());
 app.use(morgan('dev'));
 //Router
 app.use(require('./Routers/catalogos'));
-app.use(require('./Routers/puntosAtencion'));
 
 
 app.listen(app.get('port'),()=>{
