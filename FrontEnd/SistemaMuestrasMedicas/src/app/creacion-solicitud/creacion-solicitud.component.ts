@@ -17,18 +17,24 @@ export class CreacionSolicitudComponent implements OnInit {
 
   isLinear = false;
   crearSolicitudFormGroup: FormGroup;
+  soporteYContactoFormGroup: FormGroup;
   tipoSolicitante: any;
 
   constructor(private _formBuilder: FormBuilder, 
               private catalogosService: CatalogosService,
               private activatedRoute: ActivatedRoute) {
     this.crearSolicitudFormGroup = this._formBuilder.group({
-      tipoSolicitanteFormControl: ['', [Validators.required]],
-      tipoSolicitudFormControl: ['', [Validators.required]],
-      noExpedienteFormControl: ['', [Validators.required, Validators.minLength(21)]],
-      descripcionFormControl: ['', [Validators.required, Validators.minLength(10)]],
+      tipoSolicitanteFormControl: ['', []], // Validators.required
+      tipoSolicitudFormControl: ['', []], // Validators.required
+      noExpedienteFormControl: ['', []], // Validators.required, Validators.minLength(21)
+      descripcionFormControl: ['', []], // Validators.required, Validators.minLength(10)
       nitFormControl: ['', []],
       nombreFormControl: ['', []]
+    });
+
+    this.soporteYContactoFormGroup = this._formBuilder.group({
+      tipoSoporteFormControl: ['', []],
+      numeroSoporteFormControl: ['', []]
     });
 
 
