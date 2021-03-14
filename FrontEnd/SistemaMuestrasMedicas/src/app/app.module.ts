@@ -10,12 +10,14 @@ import { CreacionSolicitudComponent } from './creacion-solicitud/creacion-solici
 import { CatalogosService } from './Services/catalogos.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CrearMuestraComponent } from './crear-muestra/crear-muestra.component';
+import { AsociarComponent } from './asociar/asociar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CreacionSolicitudComponent,
-    CrearMuestraComponent 
+    CrearMuestraComponent,
+    AsociarComponent 
   ],
   imports: [
     BrowserModule,

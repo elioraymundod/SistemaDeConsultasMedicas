@@ -1,0 +1,42 @@
+<div class="card-body">
+    <mat-card-title class="titulo">Asociar </mat-card-title>
+    <mat-card class="margenArriba">
+        <mat-horizontal-stepper [linear]="isLinear" #stepper>
+             <!--Informacion creacion solicitud -->
+             <mat-step [stepControl]="AsociarFormGroup">
+                <form [formGroup]="AsociarFormGroup">
+                    <ng-template matStepLabel>Codigo de Muestra (Seleccionable)</ng-template>
+                    <div class="container">
+                        <!--Inicia Row -->
+                        <div class="row"> 
+                            <mat-form-field class="col-lg-5 col-md-4 col-sm-12">
+                                <mat-label>Ingrese el No. De muestra</mat-label>
+                             <input matInput #noExpediente placeholder="AAAAABB-99-999999" maxlength="17" >
+                                <mat-hint align="end">{{noExpediente.value.length}} / 17</mat-hint>
+                            </mat-form-field>
+
+                            <mat-form-field class="col-lg-5 col-md-4 col-sm-12">
+                                <mat-label>Numero de Muestra(el Mismo?)</mat-label>
+                             <input matInput #noExpediente placeholder="Numero de Muestra(el Mismo?)" >
+                            </mat-form-field>  
+                        </div>
+                        <div class="row">
+                            --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                            <div>
+                                <button mat-raised-button matStepperNext class="botones margenBotones" type="button"  >
+                                     Buscar
+                                </button>
+                            </div>
+                            -
+                             <div>
+                                <button mat-raised-button matStepperNext class="botones margenBotones" type="button">
+                                    Siguiente </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </mat-step>
+        </mat-horizontal-stepper>
+    </mat-card>
+
+</div>

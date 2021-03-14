@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CatalogosService } from '../Services/catalogos.service';
 
 interface Opciones{
   value : string;
@@ -15,26 +16,26 @@ export class CrearMuestraComponent implements OnInit {
 
   isLinear=false;
   crearMuestraFormGroup: FormGroup;
+  listaTipoMuestra: any;
 
-  constructor(private _formBuilder: FormBuilder) {
+  constructor(private _formBuilder: FormBuilder, 
+              private servicios: CatalogosService) {
     this.crearMuestraFormGroup = this._formBuilder.group({
       tipoMuestraFormControl: ['', [Validators.required]],
       cantidadMuestraFormControl:['',[Validators.required]],
       cantidadFormControl: ['', [Validators.required, Validators.minLength(1)]],
-      PresentacionFormControl: ['', [Validators.required, Validators.minLength(10)]]     
+      PresentacionFormControl: ['', [Validators.required, Validators.minLength(10)]]    
     });
   }
 
   ngOnInit(): void {
-    
+    this.servicios.getTipoMuestra().subscribe(res => {
+      this.listaTipoMuestra=res; 
+      console.log(this.listaTipoMuestra)
+    })
   }
 
-  tipoMuestra : Opciones[] = [
-    {value: '1', viewValue: 'Cultivo'},
-    {value: '2', viewValue: 'Plaquetas'},
-    {value: '3', viewValue: 'Eses'},
-    {value: '4', viewValue: 'Orina'}
-  ];
+  
 
   cantidadUnidades: Opciones[] = [
     {value: '1', viewValue: 'Gramos '},

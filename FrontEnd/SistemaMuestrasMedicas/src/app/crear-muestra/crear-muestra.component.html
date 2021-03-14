@@ -14,7 +14,8 @@
                             <mat-form-field appearance="fill" class="col-lg-4 col-md-4 col-sm-12">
                                 <mat-label>Tipo Muestra</mat-label>
                                 <mat-select formControlName= "tipoMuestraFormControl">
-                                  <mat-option *ngFor="let opcion of tipoMuestra" [value]="opcion.value">
+    
+                                     <mat-option *ngFor="let opcion of listaTipoMuestra" [value]="opcion.value">
                                     {{opcion.viewValue}}
                                   </mat-option>
                                 </mat-select>

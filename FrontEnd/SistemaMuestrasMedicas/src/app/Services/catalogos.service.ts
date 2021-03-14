@@ -17,4 +17,8 @@ export class CatalogosService {
     return this.http.get<any>(`${this.baseUrl}/tipoSolicitante`)
   }
 
+  public getTipoMuestra(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/tipoMuestra`)
+  }
+
 }
