@@ -4,7 +4,9 @@ INSERT INTO `catalogos` VALUES (1, 'Tipo Muestra', 'Tipos de muestras medicas.',
                                 (4, 'Tipo Soporte', 'Tipos de soporte que puede tener una solicitud.', '2021-03-03', 'master', '0.0.0.0', null, '',''),
                                 (5, 'Tipo solicitud', 'Tipos que puede ser una soliciud', '2021-03-03', 'master', '0.0.0.0', null, '',''),
                                 (6, 'Tipo solicitante', 'Tipos de solicitantes que pueden crear una solicitud.', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
-								(7, 'Tipo solicitante', 'Tipos de solicitantes que pueden crear una solicitud.', '2021-03-03', 'master', '0.0.0.0', null, '', '');
+				(7, 'Tipo solicitante', 'Tipos de solicitantes que pueden crear una solicitud.', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
+				(8, 'Tipo Soporte Interno', 'Tipos de soporte cuando se selecciona interno.', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
+				(9, 'Tipo Soporte Externo', 'Tipos de soporte cuando se selecciona externo.', '2021-03-03', 'master', '0.0.0.0', null, '', '');
 
 INSERT INTO `datos_catalogos` VALUES (1, 1, 'Cultivo', 'Cultivo', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
                                         (2, 1, 'Plaquetas', 'Plaquetas', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
@@ -35,7 +37,12 @@ INSERT INTO `datos_catalogos` VALUES (1, 1, 'Cultivo', 'Cultivo', '2021-03-03', 
                                         (27, 7, 'rolCentralizador', 'rolCentralizador', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
                                         (28, 7, 'rolAnalista', 'rolAnalista', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
                                         (29, 7, 'rolRevisor', 'rolRevisor', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
-										(30, 7, 'rolAutorizador', 'rolAutorizador', '2021-03-03', 'master', '0.0.0.0', null, '', '');
+					(30, 7, 'rolAutorizador', 'rolAutorizador', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
+					(31, 8, 'SM-Solicitud Medica', 'SM-Solicitud Medica', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
+					(32, 8, 'ET- Examen externo', 'ET- Examen externo', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
+					(33, 9, 'FP-FCTURA', 'FP-FCTURA', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
+					(34, 9, 'HO-Hoja de oficio', 'HO-Hoja de oficio', '2021-03-03', 'master', '0.0.0.0', null, '', '');
+
 
 INSERT INTO `clientes` VALUES ('45185954845', 24, 'Jeissy Dariela Castellanos Hernandez', 'San Juan Sacatepequez', '12458495/65152458', 'dariela@gmail.com', '2021-03-03', 'master', '0.0.0.0', null, '', '');
 INSERT INTO `clientes` VALUES ('95854565123', 24, 'Juan Carlos Estrada Aguirre', 'San Raymundo', '45958584/52002556', 'juancarlos@gmail.com', '2021-03-03', 'master', '0.0.0.0', null, '', '');

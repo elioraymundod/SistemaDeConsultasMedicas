@@ -11,6 +11,10 @@ import { CatalogosService } from './Services/catalogos.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CrearMuestraComponent } from './crear-muestra/crear-muestra.component';
 import { AsociarComponent } from './asociar/asociar.component';
+import { DatePipe } from '@angular/common';
+import { ClientesService } from './Services/clientes.service';
+import { ExpedientesService } from './Services/expedientes.service';
+import { SolicitudesService } from './Services/solicitudes.service';
 
 @NgModule({
   declarations: [
@@ -28,7 +32,11 @@ import { AsociarComponent } from './asociar/asociar.component';
     HttpClientModule
   ],
   providers: [
-    CatalogosService
+    CatalogosService,
+    ClientesService,
+    ExpedientesService,
+    SolicitudesService,
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })
