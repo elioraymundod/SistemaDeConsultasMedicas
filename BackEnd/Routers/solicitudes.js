@@ -17,4 +17,5 @@ router.post('/solicitudes/muestras/medicas',(req,res)=>{
                     });
 });
 
+
 module.exports= router;

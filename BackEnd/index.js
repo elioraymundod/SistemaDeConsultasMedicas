@@ -25,7 +25,7 @@ app.use(require('./Routers/catalogos'));
 app.use(require('./Routers/expedientes'));
 app.use(require('./Routers/Clientes'));
 app.use(require('./Routers/solicitudes'));
-
+app.use(require('./Routers/Muestras'));
 
 app.listen(app.get('port'),()=>{
     console.log(`Server rum on port ${app.get('port')}`)

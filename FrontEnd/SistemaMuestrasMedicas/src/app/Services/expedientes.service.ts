@@ -23,4 +23,8 @@ export class ExpedientesService {
   public getTipoSoporteExterno():Observable<any>{
     return this.http.get(`${this.baseUrl}/soporte/externo`);
   }
+
+  public getAsociarBycodigoMuestra(codigoMuestra: any):Observable<any>{
+    return this.http.get(`${this.baseUrl}/muestras/${codigoMuestra}`);
+   }
 }

@@ -46,16 +46,18 @@
                                 <mat-hint align="end">{{descripcion.value.length}} / 2000</mat-hint>
                             </mat-form-field>   
                                 <!--Espacio para adjuntar archivo--> 
-                            <mat-form-field class="col-lg-4 col-md-4 col-sm-12">
+                            <div>
                                 <mat-label>Adjuntar Archivo</mat-label>
-                             <input matInput #noExpediente placeholder="Adjunte su archivo PDF aqui.!" >
-                            </mat-form-field>
+                                -
+                             <input type="file" name="archivoSubido" >
+                             <input type="submit" value="Subir Archivo">
+                        </div>
                         </div>
                         <!--Botones -->
                         <div class="modal-footer">
                                                    
                            <button mat-raised-button matStepperNext class="botones margenBotones" type="button"
-                           [disabled]="crearMuestraFormGroup.invalid" (click)="guardarDatos()">Siguiente</button>
+                           [disabled]="crearMuestraFormGroup.invalid" (click)="guardarDatos()">Crear</button>
                         </div>
 
                                 
