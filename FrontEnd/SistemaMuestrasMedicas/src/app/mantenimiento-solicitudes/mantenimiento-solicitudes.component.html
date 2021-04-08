@@ -1,0 +1,73 @@
+<div class="card-body">
+    <mat-card-title class="titulo">Mantenimiento de Solicitudes</mat-card-title>
+
+    <mat-card class="margenArriba">
+        <div class="container">
+            <div class="col-12">
+                <button mat-raised-button class="botones margenBotones" type="button">Crear Solicitud</button>
+                <button mat-raised-button class="botones margenBotones" type="button">Buscar Solicitud</button>
+                <button mat-raised-button class="botones margenBotones" type="button">Limpiar filtro</button>
+            </div>
+            <hr>
+            <div class="col-12">
+                <form [formGroup]="filtrosFormGroup">
+                    <div class="row">
+                        <mat-form-field class="col-lg-4 col-md-4 col-sm-12">
+                            <mat-label>Codigo Solicitud</mat-label>
+                            <input matInput #codSolicitud placeholder="9999-88-77-66-5555555" maxlength="24" formControlName="codigoSolicitudFormControl" (change)="validarCodigoSolicitud()">
+                        </mat-form-field>
+                        <mat-form-field class="col-lg-4 col-md-4 col-sm-12">
+                            <mat-label>No. Expediente</mat-label>
+                            <input matInput #codigoSolicitud placeholder="9999-88-77-66-5555555" maxlength="24" formControlName="noExpedienteFormControl" (change)="validarNoExpediente()">
+                        </mat-form-field>
+                        <mat-form-field class="col-lg-4 col-md-4 col-sm-12">
+                            <mat-label>No. Soporte</mat-label>
+                            <input matInput #codigoSolicitud formControlName="noSoporteFormControl" maxlength="50" (change)="validarNoSoporte()">
+                        </mat-form-field>
+                    </div>
+                    <div class="row">
+                        <mat-form-field class="col-lg-4 col-md-4 col-sm-12">
+                            <mat-label>Usuario Asignacion</mat-label>
+                            <input matInput #codigoSolicitud placeholder="9999-88-77-66-5555555" maxlength="12" formControlName="usuarioAsignacionFormControl" (change)="validarUsuarioAsignacion()">
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="col-lg-4 col-md-4 col-sm-12">
+                            <mat-label>Fecha De</mat-label>
+                            <input matInput [matDatepicker]="fechaDe" formControlName="fechaDeFormControl" readonly (ngModelChange)="validarFechaInicio()">
+                            <mat-datepicker-toggle matSuffix [for]="fechaDe"></mat-datepicker-toggle>
+                            <mat-datepicker #fechaDe></mat-datepicker>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="col-lg-4 col-md-4 col-sm-12">
+                            <mat-label>Fecha Hasta</mat-label>
+                            <input matInput [matDatepicker]="fechaHasta" formControlName="fechaHastaFormControl" readonly (ngModelChange)="validarFechaFin()">
+                            <mat-datepicker-toggle matSuffix [for]="fechaHasta"></mat-datepicker-toggle>
+                            <mat-datepicker #fechaHasta></mat-datepicker>
+                          </mat-form-field>
+                    </div>
+                    <div class="row">
+                        <mat-form-field class="col-lg-4 col-md-4 col-sm-12">
+                            <mat-label>NIT</mat-label>
+                            <input matInput #codigoSolicitud placeholder="9999-88-77-66-5555555" maxlength="24" formControlName="nitFormControl">
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="col-lg-4 col-md-4 col-sm-12">
+                            <mat-label>Tipo Solicitud</mat-label>
+                            <mat-select formControlName="tipoSolicitudFormControl">
+                              <mat-option *ngFor="let opcion of tipoSolicitud" [value]="opcion.codigo_dato_catalogo">
+                                {{opcion.nombre}}
+                              </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="col-lg-4 col-md-4 col-sm-12">
+                            <mat-label>Estado Solicitud</mat-label>
+                            <mat-select formControlName="estadoSolicitudFormControl">
+                              <mat-option *ngFor="let opcion of estados" [value]="opcion.codigo_dato_catalogo">
+                                {{opcion.nombre}}
+                              </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </mat-card>
+
+</div>

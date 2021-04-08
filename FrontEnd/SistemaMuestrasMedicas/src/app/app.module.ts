@@ -15,13 +15,15 @@ import { DatePipe } from '@angular/common';
 import { ClientesService } from './Services/clientes.service';
 import { ExpedientesService } from './Services/expedientes.service';
 import { SolicitudesService } from './Services/solicitudes.service';
+import { MantenimientoSolicitudesComponent } from './mantenimiento-solicitudes/mantenimiento-solicitudes.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CreacionSolicitudComponent,
     CrearMuestraComponent,
-    AsociarComponent 
+    AsociarComponent,
+    MantenimientoSolicitudesComponent
   ],
   imports: [
     BrowserModule,

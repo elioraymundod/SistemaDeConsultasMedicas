@@ -15,4 +15,8 @@ export class MuestrasService {
   public getMuestraByCodigoMuestra(codigoMuestra: any):Observable<any>{
     return this.http.get(`${this.baseUrl}/muestras/${codigoMuestra}`);
   }
+
+  public getAllSolicitudes():Observable<any>{
+    return this.http.get(`${this.baseUrl}/obtener/all/solicitudes/creadas`);
+  }
 }

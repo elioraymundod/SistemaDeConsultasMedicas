@@ -75,7 +75,7 @@ CREATE TABLE `expedientes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 CREATE TABLE `muestras` (
-  `codigo_muestra` varchar(17) NOT NULL,
+  `codigo_muestra` varchar(21) NOT NULL,
   `codigo_tipo_muestra` int NOT NULL,
   `unidad_medica` int NOT NULL,
   `presentacion` varchar(2000) NOT NULL, 
@@ -93,7 +93,7 @@ CREATE TABLE `muestras` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 CREATE TABLE `solicitudes_de_muestras` (
-  `codigo_solicitud` varchar(17) NOT NULL,
+  `codigo_solicitud` varchar(21) NOT NULL,
   `codigo_tipo_solicitante` int NOT NULL,
   `codigo_tipo_solicitud` int NOT NULL,
   `no_expediente` varchar(21) NOT NULL,
@@ -122,8 +122,8 @@ CREATE TABLE `solicitudes_de_muestras` (
 
 CREATE TABLE `etiqueta_de_muestra` (
   `codigo_etiqueta` int NOT NULL AUTO_INCREMENT,
-  `codigo_muestra` varchar(17) NOT NULL,
-  `codigo_solicitud` varchar(17) NOT NULL,
+  `codigo_muestra` varchar(21) NOT NULL,
+  `codigo_solicitud` varchar(21) NOT NULL,
   `no_expediente` varchar(21) NOT NULL,
   `codigo_qr` varchar(34) NOT NULL,
   `descripcion` varchar(500) NOT NULL,  

@@ -25,4 +25,12 @@ export class CatalogosService {
     return this.http.get<any>(`${this.baseUrl}/unidadDeMedida`)
   }
 
+  public getEstados(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/estados`)
+  }
+
+  public getTipoSolicitud(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/tipoSolicitud`)
+  }
+
 }

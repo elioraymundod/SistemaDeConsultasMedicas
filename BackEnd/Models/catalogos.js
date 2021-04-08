@@ -31,4 +31,24 @@ module.exports={
             })
         })
     },  
+
+    getEstadosSolicitud(){
+        return new Promise((resolve,reject)=>{
+            con.query('SELECT pa.*  FROM muestras_medicas_db.datos_catalogos as pa '+
+            'where pa.codigo_catalogo = 3',(err,rows)=>{
+                if(err) reject(err);
+                else resolve(rows);
+            })
+        })
+    },  
+
+    getTipoSolicitud(){
+        return new Promise((resolve,reject)=>{
+            con.query('SELECT pa.*  FROM muestras_medicas_db.datos_catalogos as pa '+
+            'where pa.codigo_catalogo = 5',(err,rows)=>{
+                if(err) reject(err);
+                else resolve(rows);
+            })
+        })
+    },  
 }

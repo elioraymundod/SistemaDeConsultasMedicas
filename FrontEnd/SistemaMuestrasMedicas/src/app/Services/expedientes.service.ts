@@ -26,5 +26,5 @@ export class ExpedientesService {
 
   public getAsociarBycodigoMuestra(codigoMuestra: any):Observable<any>{
     return this.http.get(`${this.baseUrl}/muestras/${codigoMuestra}`);
-   }
+  }
 }
