@@ -49,7 +49,7 @@ export class MantenimientoSolicitudesComponent implements OnInit {
       console.log(this.estados)
     });
 
-    this.solicitudesService.getSolicitudes(1, null, null, null, null, null, null, null, null).subscribe(res => {
+    this.solicitudesService.getSolicitudes('2021-04-07-01-0000001', '4589-85-95-47-7845958', '2021').subscribe(res => {
       console.log('La solicitud es ', res)
     })
   }

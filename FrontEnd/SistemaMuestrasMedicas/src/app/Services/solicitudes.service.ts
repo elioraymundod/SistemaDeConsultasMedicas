@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, NO_ERRORS_SCHEMA } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -17,9 +17,8 @@ export class SolicitudesService {
     return this.http.post(`${this.baseUrl}/solicitudes/muestras/medicas`,solicitud)
   }
 
-  public getSolicitudes(codigoSolicitud: any, noExpediente: any, noSoporte: any, usuarioAsignacion: any, fechaInicio: any, fechaFin: any, nit: any,
-    codigoTipoSolicitud: any, codigoEstado: any):Observable<any>{
-    return this.http.get(`${this.baseUrl}/solicitudes/${codigoSolicitud}/${noExpediente}/${noSoporte}/${usuarioAsignacion}/${fechaInicio}/${fechaFin}/${nit}/${codigoTipoSolicitud}/${codigoEstado}`);
+  public getSolicitudes(codigoSolicitud: any, no_expediente: any, no_soporte: any):Observable<any>{
+    return this.http.get(`${this.baseUrl}/solicitudes/${codigoSolicitud}/${no_expediente}/${no_soporte}`);
   }
 
   public getSolicitudesByCodigo(codigoSolicitud: any):Observable<any>{
