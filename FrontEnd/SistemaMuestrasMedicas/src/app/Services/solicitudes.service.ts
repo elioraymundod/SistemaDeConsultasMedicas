@@ -17,8 +17,8 @@ export class SolicitudesService {
     return this.http.post(`${this.baseUrl}/solicitudes/muestras/medicas`,solicitud)
   }
 
-  public getSolicitudes(codigoSolicitud: any, no_expediente: any, no_soporte: any):Observable<any>{
-    return this.http.get(`${this.baseUrl}/solicitudes/${codigoSolicitud}/${no_expediente}/${no_soporte}`);
+  public getSolicitudes(codigoSolicitud: any, no_expediente: any, no_soporte: any, usuario_asignacion: any, nit: any, codigo_tipo_solicitud: any, codigo_estado: any, fecha_inicio: any, fecha_fin: any):Observable<any>{
+    return this.http.get(`${this.baseUrl}/solicitudes/${codigoSolicitud}/${no_expediente}/${no_soporte}/${usuario_asignacion}/${nit}/${codigo_tipo_solicitud}/${codigo_estado}/${fecha_inicio}/${fecha_fin}`);
   }
 
   public getSolicitudesByCodigo(codigoSolicitud: any):Observable<any>{

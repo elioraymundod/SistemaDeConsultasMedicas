@@ -13,17 +13,16 @@ module.exports={
         });
     },
 
-    // , , no_soporte, usuario_asignacion, fecha_inicio, fecha_fin, nit, codigo_tipo_solicitud, codigo_estado
-    getSolicitudes(codigo_solicitud, no_expediente, no_soporte){
-        let consulta = 'select mm.* from muestras_medicas_db.solicitudes_de_muestras as mm where mm.codigo_solicitud = ? ';
-        if (no_expediente !== '0') {
-            consulta += ' and mm.no_expediente = ?';
-        } 
-        if (no_soporte !== '0'){
-            consulta += ' and mm.no_soporte = ?'
+    getSolicitudes(codigo_solicitud, no_expediente, no_soporte, usuario_asignacion, nit, codigo_tipo_solicitud, codigo_estado, fecha_inicio, fecha_fin){
+        if (codigo_solicitud !== '0') {
+            consulta = 'select mm.* from muestras_medicas_db.solicitudes_de_muestras as mm where mm.codigo_solicitud = ? and mm.no_expediente = ?';
+        } else {
+            consulta = 'select mm.* from muestras_medicas_db.solicitudes_de_muestras as mm where mm.codigo_solicitud = ? or mm.no_expediente = ? '+ 
+            'or mm.no_soporte = ? or mm.usuario_asignacion = ? or mm.nit = ? or mm.codigo_tipo_solicitud = ? or mm.codigo_estado = ? or mm.fecha_creacion >= ? ' +
+            'or mm.fecha_creacion <= ?';
         }
         return new Promise((resolve,reject)=>{
-            con.query( consulta, [codigo_solicitud, no_expediente, no_soporte], (err,rows)=> {
+            con.query( consulta, [codigo_solicitud, no_expediente, no_soporte, usuario_asignacion, nit, codigo_tipo_solicitud, codigo_estado, fecha_inicio, fecha_fin], (err,rows)=> {
                 if(err) reject(err);
                 else resolve(rows);
             })

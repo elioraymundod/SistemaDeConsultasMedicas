@@ -136,30 +136,6 @@ export class CreacionSolicitudComponent implements OnInit {
    * Metodo para guardar una solicitud
    */
   guardarSolicitud() {
-    this.generarCodigo();
-    const solicitud = {
-      codigo_solicitud: this.numeroSolicitud,
-      codigo_tipo_solicitante: this.crearSolicitudFormGroup.get('tipoSolicitanteFormControl')?.value,
-      codigo_tipo_solicitud: this.crearSolicitudFormGroup.get('tipoSolicitudFormControl')?.value,
-      no_expediente: this.crearSolicitudFormGroup.get('noExpedienteFormControl')?.value,
-      codigo_tipo_soporte: this.soporteYContactoFormGroup.get('tipoSoporteFormControl')?.value,
-      codigo_estado: 8,
-      usuario_asignacion: '44880459848',
-      no_soporte: this.soporteYContactoFormGroup.get('numeroSoporteFormControl')?.value,
-      nit: this.crearSolicitudFormGroup.get('nitFormControl')?.value,
-      cantidad_de_muestras: 0,
-      dias_de_items: 0,
-      dias_vencimiento: 0,
-      descripcion: this.crearSolicitudFormGroup.get('descripcionFormControl')?.value,
-      telefonos: this.soporteYContactoFormGroup.get('telefonosFormControl')?.value,
-      email: this.soporteYContactoFormGroup.get('emailFormControl')?.value,
-      fecha_creacion: this.datePipe.transform(this.date, 'yyyy-MM-dd'),
-      usuario_creacion: 'master',
-      ip_usuario_creacion: '0.0.0.0',
-      fecha_modificacion: null,
-      usuario_modificacion: '',
-      ip_usuario_modificacion: ''
-    }
     Swal.fire({
       title: '¿Desea crear la solicitud?',
       showDenyButton: true,
@@ -169,7 +145,30 @@ export class CreacionSolicitudComponent implements OnInit {
       cancelButtonText: `Cancelar`, 
     }).then((result) => {
       if (result.isConfirmed) {
-        
+            this.generarCodigo();
+          const solicitud = {
+            codigo_solicitud: this.numeroSolicitud,
+            codigo_tipo_solicitante: this.crearSolicitudFormGroup.get('tipoSolicitanteFormControl')?.value,
+            codigo_tipo_solicitud: this.crearSolicitudFormGroup.get('tipoSolicitudFormControl')?.value,
+            no_expediente: this.crearSolicitudFormGroup.get('noExpedienteFormControl')?.value,
+            codigo_tipo_soporte: this.soporteYContactoFormGroup.get('tipoSoporteFormControl')?.value,
+            codigo_estado: 8,
+            usuario_asignacion: '44880459848',
+            no_soporte: this.soporteYContactoFormGroup.get('numeroSoporteFormControl')?.value,
+            nit: this.crearSolicitudFormGroup.get('nitFormControl')?.value,
+            cantidad_de_muestras: 0,
+            dias_de_items: 0,
+            dias_vencimiento: 0,
+            descripcion: this.crearSolicitudFormGroup.get('descripcionFormControl')?.value,
+            telefonos: this.soporteYContactoFormGroup.get('telefonosFormControl')?.value,
+            email: this.soporteYContactoFormGroup.get('emailFormControl')?.value,
+            fecha_creacion: this.datePipe.transform(this.date, 'yyyy-MM-dd'),
+            usuario_creacion: 'master',
+            ip_usuario_creacion: '0.0.0.0',
+            fecha_modificacion: null,
+            usuario_modificacion: '',
+            ip_usuario_modificacion: ''
+          }
        this.solicitudesService.insertSolicitud(solicitud).subscribe(res => {
           Swal.fire(`Solicitud creada con exito, el numero de su solicitud es ${this.numeroSolicitud}`, '', 'success')
         }, err => {
