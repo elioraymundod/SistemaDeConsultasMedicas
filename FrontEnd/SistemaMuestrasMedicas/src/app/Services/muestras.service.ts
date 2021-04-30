@@ -19,4 +19,8 @@ export class MuestrasService {
   public getAllSolicitudes():Observable<any>{
     return this.http.get(`${this.baseUrl}/obtener/all/solicitudes/creadas`);
   }
+
+  public insertMuestras(muestras: any):Observable<any>{
+    return this.http.post(`${this.baseUrl}/muestras/muestras/medicas`,muestras)
+  }
 }

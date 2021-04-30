@@ -17,4 +17,19 @@ router.get('/muestras/:codigoMuestra',(req,res)=>{
 
 });
 
+router.post('/muestras/muestras/medicas',(req,res)=>{
+    solicitudes.insertSolicitud(req.body)
+                    .then(muestras=>{
+                        res.status(200).send({
+                            mesage:'Se creo la muestra correctamente'
+                        });
+                    })
+                    .catch(err=>{
+                        console.error(err);
+                        res.status(500).send({
+                            mesage:'Error al crear muestra'
+                        });
+                    });
+});
+
 module.exports= router;

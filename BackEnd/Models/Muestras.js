@@ -10,4 +10,14 @@ module.exports={
             })
         })
     },
+
+    insertMuestras(muestras){
+        return new Promise((resolve,reject)=>{
+            let query='INSERT INTO muestras_medicas_db.muestras SET ?';
+            con.query(query,[muestras],(err,rows)=>{
+                if(err) reject(err);
+                else resolve (true);
+            }); 
+        });
+    },
 }

@@ -45,7 +45,7 @@ export class CreacionSolicitudComponent implements OnInit {
       noExpedienteFormControl: ['', [Validators.required, Validators.minLength(21)]], 
       descripcionFormControl: ['', [Validators.required, Validators.minLength(10)]], 
       nitFormControl: ['', []],
-      nombreFormControl: ['', []]
+       nombreFormControl: ['', []]
     });
 
     this.soporteYContactoFormGroup = this._formBuilder.group({

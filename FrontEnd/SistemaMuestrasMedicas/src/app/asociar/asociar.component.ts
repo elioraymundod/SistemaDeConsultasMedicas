@@ -16,15 +16,25 @@ interface Opciones2{
 export class AsociarComponent implements OnInit {
 isLinear=false;
 AsociarFormGroup:FormGroup;
+InformacionMuestra:FormGroup;
+Cod: any;
 
   constructor(private _formBuilder: FormBuilder,
               private muestraService: MuestrasService) {{
 this.AsociarFormGroup= this._formBuilder.group({
   codigoMuestraFormControl: ['', [Validators.required]],
-
-
 })
-
+this.InformacionMuestra= this._formBuilder.group({
+  codigoMuestra1FormControl: ['', []],
+  codigoTipoMuestraFormControl: ['', []],
+  unidadMedicaFormControl: ['', []],
+  presentacionFormControl: ['', []],
+  cantidadUnidadFormControl: ['', []],
+  fechaCreacionFormControl: ['', []],
+  fechaVencimientoFormControl: ['', []],
+  userCreacionFormControl: ['', []],
+  adjuntoFormControl: ['', []],
+})
 
   } }
 
@@ -38,9 +48,22 @@ this.AsociarFormGroup= this._formBuilder.group({
        let noCodigoMuestra = this.AsociarFormGroup.get('codigoMuestraFormControl')?.value;
       console.log(noCodigoMuestra)
        await this.muestraService.getMuestraByCodigoMuestra(noCodigoMuestra).subscribe(res =>{
-        
+        this.Cod=res;
         if(res.length !== 0){
           console.log(res)
+          console.log(this.Cod[0].codigo_muestra)
+          this.InformacionMuestra.get('codigoMuestra1FormControl')?.setValue(res[0].codigo_muestra),
+          console.log(this.Cod[0].codigo_tipo_muestra),
+          this.InformacionMuestra.get('codigoTipoMuestraFormControl')?.setValue(res[0].codigo_tipo_muestra),
+          console.log(this.Cod[0].unidad_medica),
+          this.InformacionMuestra.get('unidadMedicaFormControl')?.setValue(res[0].unidad_medica),
+          console.log(this.Cod[0].presentacion),
+          this.InformacionMuestra.get('presentacionFormControl')?.setValue(res[0].presentacion),
+          this.InformacionMuestra.get('cantidadUnidadFormControl')?.setValue(res[0].cantidadUnidades),
+          this.InformacionMuestra.get('fechaCreacionFormControl')?.setValue(res[0].fecha_creacion),
+          this.InformacionMuestra.get('fechaVencimientoFormControl')?.setValue(res[0].fecha_vencimiento),
+          this.InformacionMuestra.get('userCreacionFormControl')?.setValue(res[0].usuario_creacion),
+          this.InformacionMuestra.get('adjuntoFormControl')?.setValue(res[0].adjunto);
         }
         else {
           Swal.fire({
