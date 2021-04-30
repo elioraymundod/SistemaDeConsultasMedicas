@@ -16,6 +16,10 @@ import { ClientesService } from './Services/clientes.service';
 import { ExpedientesService } from './Services/expedientes.service';
 import { SolicitudesService } from './Services/solicitudes.service';
 import { MantenimientoSolicitudesComponent } from './mantenimiento-solicitudes/mantenimiento-solicitudes.component';
+import { InformacionExpedienteComponent } from './mantenimiento-solicitudes/informacion-expediente/informacion-expediente.component';
+import { TrazabilidadComponent } from './mantenimiento-solicitudes/trazabilidad/trazabilidad.component';
+import { InformacionClienteComponent } from './mantenimiento-solicitudes/informacion-cliente/informacion-cliente.component';
+import { InformacionGeneralComponent } from './mantenimiento-solicitudes/informacion-general/informacion-general.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +27,11 @@ import { MantenimientoSolicitudesComponent } from './mantenimiento-solicitudes/m
     CreacionSolicitudComponent,
     CrearMuestraComponent,
     AsociarComponent,
-    MantenimientoSolicitudesComponent
+    MantenimientoSolicitudesComponent,
+    InformacionExpedienteComponent,
+    TrazabilidadComponent,
+    InformacionClienteComponent,
+    InformacionGeneralComponent
   ],
   imports: [
     BrowserModule,

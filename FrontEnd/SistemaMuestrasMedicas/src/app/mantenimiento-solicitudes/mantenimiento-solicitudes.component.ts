@@ -3,12 +3,17 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
 import { CatalogosService } from '../Services/catalogos.service';
 import { SolicitudesService } from '../Services/solicitudes.service';
 declare let $: any;
 
+interface Opciones{
+  value : string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-mantenimiento-solicitudes',
@@ -20,15 +25,18 @@ export class MantenimientoSolicitudesComponent implements OnInit {
   tipoSolicitud: any;
   estados: any;
   filtrosFormGroup: FormGroup;
+  accionesFormGroup: FormGroup;
   mostrarTabla: boolean;
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
-  displayedColumns = ['codigo_solicitud', 'descripcion', 'fecha_creacion', 'nit', 'no_expediente', 'no_soporte'];
+  displayedColumns = ['codigo_solicitud', 'no_expediente', 'nit', 'no_soporte', 'tipo_solicitud', 'usuario', 'estado', 'fecha_creacion', 'cantidad_de_muestras', 'dias_de_items', 'documentos', 'dias_vencimiento', 'accion'];
   dataSource = new MatTableDataSource();
+  dataSourceExcel = new MatTableDataSource();
 
 
   constructor(private catalogosService: CatalogosService,
               private _formBuilder: FormBuilder,
-              private solicitudesService: SolicitudesService) {
+              private solicitudesService: SolicitudesService,
+              private router: Router) {
 
     this.filtrosFormGroup = this._formBuilder.group({
       codigoSolicitudFormControl: ['', [Validators.pattern('([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9][0-9])')]],
@@ -41,6 +49,10 @@ export class MantenimientoSolicitudesComponent implements OnInit {
       tipoSolicitudFormControl: [''],
       estadoSolicitudFormControl: ['']
     });
+
+    this.accionesFormGroup = this._formBuilder.group({
+      opcionFormControl: ['']
+    })
 
     this.mostrarTabla = false;
   }
@@ -184,25 +196,37 @@ export class MantenimientoSolicitudesComponent implements OnInit {
 
       let fechaDe = String(moment(this.filtrosFormGroup.get('fechaDeFormControl')?.value).format('YYYY-MM-DD'));
       if (fechaDe === '') {
-        fechaDe = '0';
+        fechaDe = '1900-01-01';
       }
       console.log(fechaDe)
 
-      let fechaHasta = this.filtrosFormGroup.get('fechaHastaFormControl')?.value;
+      let fechaHasta = String(moment(this.filtrosFormGroup.get('fechaHastaFormControl')?.value).format('YYYY-MM-DD'));
       if (fechaHasta === '') {
         fechaHasta = '0';
       }
 
-      this.solicitudesService.getSolicitudes(codigoSolicitud, noExpediente, noSoporte, usuarioAsignacion, nit, tipoSolicitud, estadoSolicitud, fechaDe, fechaHasta).subscribe(res => {
+      this.solicitudesService.getSolicitudes(codigoSolicitud, noExpediente, noSoporte, usuarioAsignacion, nit, String(tipoSolicitud), String(estadoSolicitud), fechaDe, fechaHasta).subscribe(res => {
         if(res.length !== 0) {
           for(let i = 0; i< res.length; i++) {
             res[i].fecha_creacion = String(moment(res[i].fecha_creacion.replace('+0000', '')).format('DD-MM-YYYY'))
           }
           this.dataSource.data = res;
           this.mostrarTabla = true;
+          console.log(res)
         } else {
           this.mostrarTabla = false;
-          Swal.fire('No se encontraron resultados con los datos ingrsados, por favor verificar los datos.', '', 'error')
+          console.log(String(codigoSolicitud))
+          Swal.fire('No se encontraron resultados con los datos ingresados, por favor verificar los datos.', '', 'error')
+        }
+      })
+
+      this.solicitudesService.getSolicitudesExcel(codigoSolicitud, noExpediente, noSoporte, usuarioAsignacion, nit, String(tipoSolicitud), String(estadoSolicitud), fechaDe, fechaHasta).subscribe(res => {
+        if(res.length !== 0) {
+          for(let i = 0; i< res.length; i++) {
+            res[i].fecha_creacion = String(moment(res[i].fecha_creacion.replace('+0000', '')).format('DD-MM-YYYY'))
+          }
+          this.dataSourceExcel.data = res;
+          console.log(res)
         }
       })
     }
@@ -220,5 +244,52 @@ export class MantenimientoSolicitudesComponent implements OnInit {
     this.filtrosFormGroup.get('estadoSolicitudFormControl')?.setValue('');
     this.mostrarTabla = false;
   }
+
+  ejecutarAccion(datos: any) {
+    console.log(datos)
+    let complementoRuta = datos.codigo_solicitud
+    let opcionSeleccionada = this.accionesFormGroup.get('opcionFormControl')?.value;
+    switch(opcionSeleccionada) {
+      case '1': // Exportar a excel
+        this.solicitudesService.exportToExcel(this.dataSourceExcel.data, 'resultado_consulta');
+        break;
+      case '2': // Informacion general
+        this.router.navigate(['mantenimiento-solicitudes/informacion-general/', complementoRuta]);
+        break;
+      case '3': // Informacion expediente
+        this.router.navigate(['mantenimiento-solicitudes/informacion-expediente/', complementoRuta]);
+        break;
+      case '4': // muestras
+        this.router.navigate(['crearMuestra']);
+        break;
+      case '5':
+
+        break;
+      case '6':
+
+        break;
+      case '7':
+
+        break;
+      case '8':
+
+        break;
+      case '9':
+        this.router.navigate(['mantenimiento-solicitudes/informacion-cliente/', complementoRuta]);
+        break;      
+    }
+  }
+
+  acciones: Opciones[] = [
+    {value: '1', viewValue: 'Exportar a Excel'},
+    {value: '2', viewValue: 'Información General'},
+    {value: '3', viewValue: 'Información Expediente'},
+    {value: '4', viewValue: 'Muestras'},
+    {value: '5', viewValue: 'Trazabilidad'},
+    {value: '6', viewValue: 'Etiqueta de muestra'},
+    {value: '7', viewValue: 'Eliminar solicitud'},
+    {value: '8', viewValue: 'Estados de la solicitud'},
+    {value: '9', viewValue: 'Información Cliente'}
+  ];
 
 }
