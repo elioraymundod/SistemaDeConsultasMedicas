@@ -2,6 +2,10 @@
     <mat-card-title class="titulo">Creacion de Muestra</mat-card-title>
 
     <mat-card class="margenArriba">
+        <div class="col-12">
+            <button mat-raised-button class="botones margenBotones" type="button" (click)="regresarAMantenimientoSolicitudes()">Regresar</button>
+        </div>
+        <br><br>
         <mat-horizontal-stepper [linear]="isLinear" #stepper>
             <!--Informacion creacion solicitud -->
              <mat-step [stepControl]="crearMuestraFormGroup">

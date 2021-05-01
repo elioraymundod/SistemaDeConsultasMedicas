@@ -4,7 +4,10 @@ module.exports={
 
     getAsociarBycodigoMuestra(codigoMuestra){
         return new Promise((resolve,reject)=>{
-            con.query( 'SELECT * FROM muestras_medicas_db.muestras WHERE codigo_muestra = ? ', codigoMuestra, (err,rows)=> {
+            con.query( 'SELECT me.*, ca.nombre as tipo_muestra, le.nombre as nombre_unidad FROM muestras_medicas_db.muestras as me '+
+            'inner join muestras_medicas_db.datos_catalogos as ca on me.codigo_tipo_muestra = ca.codigo_dato_catalogo '+
+            'inner join muestras_medicas_db.datos_catalogos as le on me.unidad_medica= le.codigo_dato_catalogo '+
+            'WHERE codigo_muestra = ?', codigoMuestra, (err,rows)=> {
                 if(err) reject(err);
                 else resolve(rows);
             })
@@ -20,4 +23,13 @@ module.exports={
             }); 
         });
     },
+
+    getAllMuestras(){
+        return new Promise((resolve,reject)=>{
+            con.query('select * from muestras_medicas_db.muestras',(err,rows)=>{
+                if(err) reject(err);
+                else resolve(rows);
+            })
+        })
+    }, 
 }

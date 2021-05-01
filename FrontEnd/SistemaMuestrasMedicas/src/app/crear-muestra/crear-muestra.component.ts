@@ -1,6 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import * as moment from 'moment';
 import Swal from 'sweetalert2';
 import { CatalogosService } from '../Services/catalogos.service';
 import { MuestrasService } from '../Services/muestras.service';
@@ -28,7 +30,8 @@ export class CrearMuestraComponent implements OnInit {
   constructor(private _formBuilder: FormBuilder,
     private muestrasService: MuestrasService,// preguntar a Elio  
               private servicios: CatalogosService,
-              private datePipe: DatePipe) {
+              private datePipe: DatePipe,
+              private router: Router) {
     this.crearMuestraFormGroup = this._formBuilder.group({
       tipoMuestraFormControl: ['', [Validators.required]],
       cantidadMuestraFormControl:['',[Validators.required]],
@@ -51,7 +54,7 @@ export class CrearMuestraComponent implements OnInit {
     })
 
     // Obtener cantidad solicitudes
-    await this.muestrasService.getAllSolicitudes().subscribe(res => {
+    await this.muestrasService.getAllMuesteras().subscribe(res => {
       this.cantidadMuestras = res.length;
       console.log('la cantidad de solicitudes es ', this.cantidadMuestras)
     });
@@ -72,11 +75,11 @@ export class CrearMuestraComponent implements OnInit {
           const muestras = {
             codigo_muestra: this.numeroMuestras,
             codigo_tipo_muestra: this.crearMuestraFormGroup.get('tipoMuestraFormControl')?.value,
-            unidad_medica: this.crearMuestraFormGroup.get('cantidadFormControl')?.value,
+            unidad_medica: this.crearMuestraFormGroup.get('cantidadMuestraFormControl')?.value,
             presentacion: this.crearMuestraFormGroup.get('PresentacionFormControl')?.value,
-            cantidadUnidades: this.crearMuestraFormGroup.get('cantidadMuestraFormControl')?.value,
+            cantidadUnidades: Number(this.crearMuestraFormGroup.get('cantidadFormControl')?.value) ,
             adjunto: null,//pendiente ver como se mete 
-            fecha_vencimiento: '20/05/2021',
+            fecha_vencimiento: '2021-01-01',
             fecha_creacion: this.datePipe.transform(this.date, 'yyyy-MM-dd'),
             usuario_creacion: 'master' ,
             ip_usuario_creacion: '10.11.200.74',
@@ -88,7 +91,8 @@ export class CrearMuestraComponent implements OnInit {
           console.log('prueba ',muestras)
 
        this.muestrasService.insertMuestras(muestras).subscribe(res => {
-          Swal.fire(`Muestra creada con exito, el numero de su solicitud es ${this.numeroMuestras}`, '', 'success')
+          Swal.fire(`Muestra creada con exito, el numero de su solicitud es ${this.numeroMuestras}`, '', 'success');
+          this.crearMuestraFormGroup.reset();
         }, err => {
           Swal.fire('No se pudo almacenar la muestra', '', 'error')
         });
@@ -102,12 +106,17 @@ export class CrearMuestraComponent implements OnInit {
   }
 
   generarCodigo() {
-    const anio = 1111166;
-    const mes = 22;
+    const anio = moment().format('YYYY');
+    const mes = moment().format('MM')
+    const dia = moment().format('DD')
     this.cantidadMuestras += 1;
     var correlativo = this.cantidadMuestras.toString().padStart(6,'0');
-    this.numeroMuestras = anio + '-' + mes + '-' + '01-' + correlativo;
+    this.numeroMuestras = anio + '-' + mes + '-' + dia + '-01-' + correlativo;
     console.log(this.numeroMuestras);
+  }
+
+  regresarAMantenimientoSolicitudes() {
+    this.router.navigate(['mantenimiento-solicitudes']);
   }
   
 

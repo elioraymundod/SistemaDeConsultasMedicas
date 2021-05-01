@@ -4,7 +4,7 @@ module.exports={
     user:"root",
     password:"",
     db:"muestras_medicas_db",
-    port: 3308
+    port: 3306
 }
 
    

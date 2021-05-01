@@ -260,7 +260,7 @@ export class MantenimientoSolicitudesComponent implements OnInit {
         this.router.navigate(['mantenimiento-solicitudes/informacion-expediente/', complementoRuta]);
         break;
       case '4': // muestras
-        this.router.navigate(['crearMuestra']);
+        this.router.navigate(['asociar/', complementoRuta]);
         break;
       case '5':
 
@@ -284,12 +284,16 @@ export class MantenimientoSolicitudesComponent implements OnInit {
     {value: '1', viewValue: 'Exportar a Excel'},
     {value: '2', viewValue: 'Información General'},
     {value: '3', viewValue: 'Información Expediente'},
-    {value: '4', viewValue: 'Muestras'},
+    {value: '4', viewValue: 'Asociar'},
     {value: '5', viewValue: 'Trazabilidad'},
     {value: '6', viewValue: 'Etiqueta de muestra'},
     {value: '7', viewValue: 'Eliminar solicitud'},
     {value: '8', viewValue: 'Estados de la solicitud'},
     {value: '9', viewValue: 'Información Cliente'}
   ];
+
+  muestras() {
+    this.router.navigate(['crearMuestra']);
+  }
 
 }

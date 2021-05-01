@@ -29,7 +29,7 @@ export class SolicitudesService {
   }
 
   public getSolicitudesByCodigo(codigoSolicitud: any):Observable<any>{
-    return this.http.get(`${this.baseUrl}/solicitudes/${codigoSolicitud}`);
+    return this.http.get(`${this.baseUrl}/solicitudes/por/codigo/${codigoSolicitud}`);
   }
 
   public exportToExcel(json:any[], excelFileName: string): void{

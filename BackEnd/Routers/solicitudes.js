@@ -46,7 +46,7 @@ router.get('/solicitudes/excel/:codigo_solicitud/:no_expediente/:no_soporte/:usu
 
 });
 
-router.get('/solicitudes/:codigo_solicitud',(req,res)=>{
+router.get('/solicitudes/por/codigo/:codigo_solicitud',(req,res)=>{
     solicitudes.getSolicitudesByCodigo(req.params.codigo_solicitud)
                     .then(solicitudes=>{
                         res.status(200).send(solicitudes);

@@ -1,6 +1,10 @@
 <div class="card-body">
     <mat-card-title class="titulo">Asociar </mat-card-title>
     <mat-card class="margenArriba">
+        <div class="col-12">
+            <button mat-raised-button class="botones margenBotones" type="button" (click)="regresarAMantenimientoSolicitudes()">Regresar</button>
+        </div>
+        <br><br>
         <mat-horizontal-stepper [linear]="isLinear" #stepper>
              <!--Informacion creacion solicitud -->
              <mat-step [stepControl]="AsociarFormGroup">
@@ -11,24 +15,24 @@
                         <div class="row"> 
                             <mat-form-field class="col-lg-5 col-md-4 col-sm-12">
                                 <mat-label>Ingrese el No. De muestra</mat-label>
-                             <input matInput #noExpediente placeholder="AAAAABB-99-999999" maxlength="17" formControlName="codigoMuestraFormControl" >
-                                <mat-hint align="end">{{noExpediente.value.length}} / 17</mat-hint>
+                             <input matInput #noExpediente placeholder="AAAAABB-99-999999" maxlength="21" formControlName="codigoMuestraFormControl" >
+                                <mat-hint align="end">{{noExpediente.value.length}} / 21</mat-hint>
                             </mat-form-field>
  
                         </div>
                         <div class="modal-footer">
                            
                             <div>
-                                <button mat-raised-button matStepperNext class="botones margenBotones" type="button" 
+                                <button mat-raised-button class="botones margenBotones" type="button" 
                                 [disabled]="AsociarFormGroup.invalid" (click)="getMuestra()">
                                        Buscar
                                 </button>
                             </div>
-                            -
+                            
                             <div>
                                                    
                                 <button mat-raised-button matStepperNext class="botones margenBotones" type="button"
-                                [disabled]="AsociarFormGroup.invalid">Siguiente</button>
+                                [disabled]="habilitarBtnSiguiente === false">Siguiente</button>
                              </div>
                         </div>
                     </div>
@@ -46,8 +50,16 @@
                                 <input matInput #nit  formControlName= "codigoMuestra1FormControl" readonly>
                             </mat-form-field>
                             <mat-form-field class="col-lg-4 col-md-4 col-sm-12">
-                                <mat-label>Codigo tipo Muestra</mat-label>
+                                <mat-label>Tipo Muestra</mat-label>
                                 <input matInput #nit  formControlName= "codigoTipoMuestraFormControl" readonly>
+                            </mat-form-field>
+                            <mat-form-field class="col-lg-4 col-md-4 col-sm-12">
+                                <mat-label>Codigo solicitud</mat-label>
+                                <input matInput #nit  formControlName= "codigoSolicitudFormControl" readonly>
+                            </mat-form-field>
+                            <mat-form-field class="col-lg-4 col-md-4 col-sm-12">
+                                <mat-label>Numero Expediente</mat-label>
+                                <input matInput #nit  formControlName= "noExpedienteFormControl" readonly>
                             </mat-form-field>
                             <mat-form-field class="col-lg-4 col-md-4 col-sm-12">
                                 <mat-label>Unidad Medica</mat-label>
@@ -56,6 +68,22 @@
                             <mat-form-field class="col-lg-4 col-md-4 col-sm-12">
                                 <mat-label>Presentacion</mat-label>
                                 <input matInput #nit  formControlName= "presentacionFormControl" readonly>
+                            </mat-form-field>
+                            <mat-form-field class="col-lg-4 col-md-4 col-sm-12">
+                                <mat-label>NIT</mat-label>
+                                <input matInput #nit  formControlName= "nitFormControl" readonly>
+                            </mat-form-field>
+                            <mat-form-field class="col-lg-4 col-md-4 col-sm-12">
+                                <mat-label>Usuario Asignacion</mat-label>
+                                <input matInput #nit  formControlName= "usuarioAsignacionFormControl" readonly>
+                            </mat-form-field>
+                            <mat-form-field class="col-lg-4 col-md-4 col-sm-12">
+                                <mat-label>Usuario Creacion</mat-label>
+                                <input matInput #nit  formControlName= "usuarioCreacionFormControl" readonly>
+                            </mat-form-field>
+                            <mat-form-field class="col-lg-4 col-md-4 col-sm-12">
+                                <mat-label>Estado solicitud</mat-label>
+                                <input matInput #nit  formControlName= "estadoFormControl" readonly>
                             </mat-form-field>
                             <mat-form-field class="col-lg-4 col-md-4 col-sm-12">
                                 <mat-label>Cantidad Unidades</mat-label>
@@ -72,6 +100,10 @@
                             <mat-form-field class="col-lg-4 col-md-4 col-sm-12">
                                 <mat-label>Usuario Creacion Muestra</mat-label>
                                 <input matInput #nit  formControlName= "userCreacionFormControl" readonly>
+                            </mat-form-field>
+                            <mat-form-field class="col-lg-4 col-md-4 col-sm-12">
+                                <mat-label>Cantidad items</mat-label>
+                                <input matInput #nit  formControlName= "itemsFormControl" readonly>
                             </mat-form-field>
                             <mat-form-field class="col-lg-4 col-md-4 col-sm-12">
                                 <mat-label>Archivo Adjunto</mat-label>

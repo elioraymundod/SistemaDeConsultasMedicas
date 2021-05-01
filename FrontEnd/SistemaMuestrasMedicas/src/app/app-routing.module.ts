@@ -12,7 +12,7 @@ import { TrazabilidadComponent } from './mantenimiento-solicitudes/trazabilidad/
 const routes: Routes = [
   {path: 'creacionSolicitud', component: CreacionSolicitudComponent},
   {path:'crearMuestra',component: CrearMuestraComponent},
-  {path:'Asociar',component: AsociarComponent},
+  {path:'asociar/:codigo_solicitud',component: AsociarComponent},
   {path: 'mantenimiento-solicitudes', component: MantenimientoSolicitudesComponent},
   {path: 'mantenimiento-solicitudes/informacion-cliente/:codigo_solicitud', component: InformacionClienteComponent},
   {path: 'mantenimiento-solicitudes/informacion-expediente/:codigo_solicitud', component: InformacionExpedienteComponent},

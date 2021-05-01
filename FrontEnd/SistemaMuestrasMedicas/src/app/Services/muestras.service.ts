@@ -20,6 +20,10 @@ export class MuestrasService {
     return this.http.get(`${this.baseUrl}/obtener/all/solicitudes/creadas`);
   }
 
+  public getAllMuesteras():Observable<any>{
+    return this.http.get(`${this.baseUrl}/obtener/all/muestras`);
+  }
+
   public insertMuestras(muestras: any):Observable<any>{
     return this.http.post(`${this.baseUrl}/muestras/muestras/medicas`,muestras)
   }
