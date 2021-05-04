@@ -105,7 +105,6 @@ CREATE TABLE `solicitudes_de_muestras` (
   `usuario_asignacion` varchar(11),  
   `no_soporte` varchar(50) NOT NULL,
   `nit` varchar(11),  
-  `codigo_estado` int NOT NULL,
   `cantidad_de_muestras` int,  
   `dias_de_items` int,
   `dias_vencimiento` int,

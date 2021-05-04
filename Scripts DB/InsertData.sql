@@ -45,7 +45,7 @@ INSERT INTO `datos_catalogos` VALUES (1, 1, 'Cultivo', 'Cultivo', '2021-03-03', 
 					(33, 9, 'FP-FCTURA', 'FP-FCTURA', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
 					(34, 9, 'HO-Hoja de oficio', 'HO-Hoja de oficio', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
 					(35, 10, 'Activo', 'Activo', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
-					(36, 10, 'Inactivo', 'Inactivo', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
+					(36, 10, 'Inactivo', 'Inactivo', '2021-03-03', 'master', '0.0.0.0', null, '', '');
 
 
 INSERT INTO `clientes` VALUES ('45185954845', 24, 'Jeissy Dariela Castellanos Hernandez', 'San Juan Sacatepequez', '12458495/65152458', 35, 'dariela@gmail.com', '2021-03-03', 'master', '0.0.0.0', null, '', '');
