@@ -6,7 +6,9 @@ INSERT INTO `catalogos` VALUES (1, 'Tipo Muestra', 'Tipos de muestras medicas.',
                                 (6, 'Tipo solicitante', 'Tipos de solicitantes que pueden crear una solicitud.', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
 				(7, 'Tipo solicitante', 'Tipos de solicitantes que pueden crear una solicitud.', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
 				(8, 'Tipo Soporte Interno', 'Tipos de soporte cuando se selecciona interno.', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
-				(9, 'Tipo Soporte Externo', 'Tipos de soporte cuando se selecciona externo.', '2021-03-03', 'master', '0.0.0.0', null, '', '');
+				(9, 'Tipo Soporte Externo', 'Tipos de soporte cuando se selecciona externo.', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
+				(10, 'Estados generales', 'Estados generales', '2021-03-03', 'master', '0.0.0.0', null, '', '');
+
 
 INSERT INTO `datos_catalogos` VALUES (1, 1, 'Cultivo', 'Cultivo', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
                                         (2, 1, 'Plaquetas', 'Plaquetas', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
@@ -41,15 +43,17 @@ INSERT INTO `datos_catalogos` VALUES (1, 1, 'Cultivo', 'Cultivo', '2021-03-03', 
 					(31, 8, 'SM-Solicitud Medica', 'SM-Solicitud Medica', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
 					(32, 8, 'ET- Examen externo', 'ET- Examen externo', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
 					(33, 9, 'FP-FCTURA', 'FP-FCTURA', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
-					(34, 9, 'HO-Hoja de oficio', 'HO-Hoja de oficio', '2021-03-03', 'master', '0.0.0.0', null, '', '');
+					(34, 9, 'HO-Hoja de oficio', 'HO-Hoja de oficio', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
+					(35, 10, 'Activo', 'Activo', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
+					(36, 10, 'Inactivo', 'Inactivo', '2021-03-03', 'master', '0.0.0.0', null, '', ''),
 
 
-INSERT INTO `clientes` VALUES ('45185954845', 24, 'Jeissy Dariela Castellanos Hernandez', 'San Juan Sacatepequez', '12458495/65152458', 'dariela@gmail.com', '2021-03-03', 'master', '0.0.0.0', null, '', '');
-INSERT INTO `clientes` VALUES ('95854565123', 24, 'Juan Carlos Estrada Aguirre', 'San Raymundo', '45958584/52002556', 'juancarlos@gmail.com', '2021-03-03', 'master', '0.0.0.0', null, '', '');
-INSERT INTO `clientes` VALUES ('18545986565', 24, 'Martha Nineth Lopez Urizar', 'Lo de Mejia', '12348595', 'martha@gmail.com', '2021-03-03', 'master', '0.0.0.0', null, '', '');
-INSERT INTO `clientes` VALUES ('64584568489', 25, 'Pahola Marin Catalan', 'Zona 7, Guatemala', '45985875/78945858', 'pahola@gmail.com', '2021-03-03', 'master', '0.0.0.0', null, '', '');
-INSERT INTO `clientes` VALUES ('49548984954', 25, 'Rodolfo Bartolome Juarez Rojas', 'Zona 14', '52465859', 'rodolfo@gmail.com', '2021-03-03', 'master', '0.0.0.0', null, '', '');
-INSERT INTO `clientes` VALUES ('19584958756', 25, 'Mael Rosalio Rosales Rosas', 'Amatitlan', '49585946/95858485', 'mael@gmail.com', '2021-03-03', 'master', '0.0.0.0', null, '', '');
+INSERT INTO `clientes` VALUES ('45185954845', 24, 'Jeissy Dariela Castellanos Hernandez', 'San Juan Sacatepequez', '12458495/65152458', 35, 'dariela@gmail.com', '2021-03-03', 'master', '0.0.0.0', null, '', '');
+INSERT INTO `clientes` VALUES ('95854565123', 24, 'Juan Carlos Estrada Aguirre', 'San Raymundo', '45958584/52002556', 35, 'juancarlos@gmail.com', '2021-03-03', 'master', '0.0.0.0', null, '', '');
+INSERT INTO `clientes` VALUES ('18545986565', 24, 'Martha Nineth Lopez Urizar', 'Lo de Mejia', '12348595', 35, 'martha@gmail.com', '2021-03-03', 'master', '0.0.0.0', null, '', '');
+INSERT INTO `clientes` VALUES ('64584568489', 25, 'Pahola Marin Catalan', 'Zona 7, Guatemala', '45985875/78945858', 35, 'pahola@gmail.com', '2021-03-03', 'master', '0.0.0.0', null, '', '');
+INSERT INTO `clientes` VALUES ('49548984954', 25, 'Rodolfo Bartolome Juarez Rojas', 'Zona 14', '52465859', 35, 'rodolfo@gmail.com', '2021-03-03', 'master', '0.0.0.0', null, '', '');
+INSERT INTO `clientes` VALUES ('19584958756', 25, 'Mael Rosalio Rosales Rosas', 'Amatitlan', '49585946/95858485', 35, 'mael@gmail.com', '2021-03-03', 'master', '0.0.0.0', null, '', '');
 
 INSERT INTO `expedientes` VALUES('4589-85-95-47-7845958', '45185954845', 'Expediente activo.', '2021-03-03', 'master', '0.0.0.0', null, '', '');
 INSERT INTO `expedientes` VALUES('9858-59-45-71-4565848', '95854565123', 'Expediente activo.', '2021-03-03', 'master', '0.0.0.0', null, '', '');
@@ -58,8 +62,8 @@ INSERT INTO `expedientes` VALUES('8495-77-55-66-1234567', '64584568489', 'Expedi
 INSERT INTO `expedientes` VALUES('4859-77-95-59-1595498', '49548984954', 'Expediente activo.', '2021-03-03', 'master', '0.0.0.0', null, '', '');
 INSERT INTO `expedientes` VALUES('7895-45-89-45-4958548', '19584958756', 'Expediente activo.', '2021-03-03', 'master', '0.0.0.0', null, '', '');
 
-INSERT INTO `usuarios` VALUES ('49548585958', 26, 'Elio Isai Raymundo Diaz', 'aeiraymun', '1234','2021-03-03', 'master', '0.0.0.0', null, '', '');
-INSERT INTO `usuarios` VALUES ('98456849845', 27, 'Lester Raul Toj', 'lrtoj', '1234','2021-03-03', 'master', '0.0.0.0', null, '', '');
-INSERT INTO `usuarios` VALUES ('97845688595', 28, 'Diego Sebastian Mijangos Flores', 'dsmijangos','1234','2021-03-03', 'master', '0.0.0.0', null, '', '');
-INSERT INTO `usuarios` VALUES ('98511544899', 29, 'Denis Ivan Santizo Pocon', 'disantizo', '1234','2021-03-03', 'master', '0.0.0.0', null, '', '');
-INSERT INTO `usuarios` VALUES ('44880459848', 30, 'Madeline Yocary Coronado ', 'mycoronado', '1234','2021-03-03', 'master', '0.0.0.0', null, '', '');
+INSERT INTO `usuarios` VALUES ('49548585958', 26, 35, 'Elio Isai Raymundo Diaz', 'aeiraymun', '1234','2021-03-03', 'master', '0.0.0.0', null, '', '');
+INSERT INTO `usuarios` VALUES ('98456849845', 27, 35, 'Lester Raul Toj', 'lrtoj', '1234','2021-03-03', 'master', '0.0.0.0', null, '', '');
+INSERT INTO `usuarios` VALUES ('97845688595', 28, 35, 'Diego Sebastian Mijangos Flores', 'dsmijangos','1234','2021-03-03', 'master', '0.0.0.0', null, '', '');
+INSERT INTO `usuarios` VALUES ('98511544899', 29, 35, 'Denis Ivan Santizo Pocon', 'disantizo', '1234','2021-03-03', 'master', '0.0.0.0', null, '', '');
+INSERT INTO `usuarios` VALUES ('44880459848', 30, 35, 'Madeline Yocary Coronado ', 'mycoronado', '1234','2021-03-03', 'master', '0.0.0.0', null, '', '');

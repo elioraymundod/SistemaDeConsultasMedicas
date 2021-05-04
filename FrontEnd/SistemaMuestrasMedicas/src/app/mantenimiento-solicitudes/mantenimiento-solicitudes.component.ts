@@ -296,4 +296,8 @@ export class MantenimientoSolicitudesComponent implements OnInit {
     this.router.navigate(['crearMuestra']);
   }
 
+  crearSolicitud() {
+    this.router.navigate(['creacionSolicitud']);
+  }
+
 }

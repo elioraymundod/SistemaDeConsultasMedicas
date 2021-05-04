@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, ComponentFactoryResolver, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
 import { CatalogosService } from '../Services/catalogos.service';
@@ -38,7 +38,8 @@ export class CreacionSolicitudComponent implements OnInit {
               private solicitudesService: SolicitudesService,
               private muestrasService: MuestrasService,
               private activatedRoute: ActivatedRoute,
-              private datePipe: DatePipe) {
+              private datePipe: DatePipe,
+              private router: Router) {
     this.crearSolicitudFormGroup = this._formBuilder.group({
       tipoSolicitanteFormControl: ['', [Validators.required]], 
       tipoSolicitudFormControl: ['', [Validators.required]], 
@@ -191,5 +192,9 @@ export class CreacionSolicitudComponent implements OnInit {
     var correlativo = this.cantidadSolicitudes.toString().padStart(7,'0');
     this.numeroSolicitud = anio + '-' + mes + '-' + dia + '-01-' + correlativo;
     console.log(this.numeroSolicitud);
+  }
+
+  regresarAMantenimientoSolicitudes() {
+    this.router.navigate(['mantenimiento-solicitudes']);
   }
 }
