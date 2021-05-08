@@ -112,18 +112,85 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button mat-raised-button type="button" color="warn" type="button">
+                        <!--button mat-raised-button type="button" color="warn" type="button">
                             Cancelar
-                        </button>
+                        </button-->
                         <button mat-raised-button type="button" class="botones mr-2" matStepperPrevious>
                             Regresar
                         </button>
-                        <button mat-raised-button type="button" class="botones"
-                            matStepperNext>
+                        <button mat-raised-button matStepperNext class="botones margenBotones" type="button"
+                                [disabled]="habilitarBtnSiguiente === false">Siguiente</button>
+                    </div>
+                </form>
+            </mat-step>
+            <!--Asociar items -->
+            <mat-step [stepControl]="itemsFormGroup">
+                <form [formGroup]="itemsFormGroup">
+                    <ng-template matStepLabel>Asociar items</ng-template>
+                    <div class="m-0 row justify-content-center">
+                        <div *ngIf="tipoMuestra === 'Cultivo'">
+                            <div class="col- text-center">
+                                <mat-form-field >
+                                    <mat-label>Microbiótico</mat-label>
+                                    <input matInput placeholder=""  formControlName="microbioticoFormControl" autocomplete="off">
+                                </mat-form-field>
+                                <mat-slide-toggle>Seleccionar item</mat-slide-toggle>
+                            </div>
+                        </div>
+                        <div *ngIf="tipoMuestra === 'Plaquetas'">
+                            <div class="col-auto text-center">
+                                <mat-form-field >
+                                    <input matInput placeholder=""   autocomplete="off" value="Triglicéridos" readonly>
+                                </mat-form-field>
+                                <mat-slide-toggle formControlName="trigliceridosFormControl"  (change)="validarSlideToggles()">Seleccionar item</mat-slide-toggle>
+                            </div>
+                            <div class="col-auto text-center">
+                                <mat-form-field >
+                                    <input matInput placeholder=""   autocomplete="off" value="Diabetes" readonly>
+                                </mat-form-field>
+                                <mat-slide-toggle formControlName="diabetesFormControl"  (change)="validarSlideToggles()">Seleccionar item</mat-slide-toggle>
+                            </div>
+                            <div class="col-auto text-center">
+                                <mat-form-field >
+                                    <input matInput placeholder=""   autocomplete="off" value="Embarazo" readonly>
+                                </mat-form-field>
+                                <mat-slide-toggle formControlName="embarazoFormControl"  (change)="validarSlideToggles()">Seleccionar item</mat-slide-toggle>
+                            </div>
+                        </div>
+                        <div *ngIf="tipoMuestra === 'Eses'">
+                            <div class="col-auto text-center">
+                                <mat-form-field >
+                                    <input matInput placeholder=""   autocomplete="off" value="Test de drogas" readonly>
+                                </mat-form-field>
+                                <mat-slide-toggle formControlName="testDrogasFormControl"  (change)="validarSlideToggles()">Seleccionar item</mat-slide-toggle>
+                            </div>
+                            <div class="col-auto text-center">
+                                <mat-form-field >
+                                    <input matInput placeholder=""   autocomplete="off" value="Test de enfermedades renales" readonly>
+                                </mat-form-field>
+                                <mat-slide-toggle formControlName="testEnfermedadesFormControl"  (change)="validarSlideToggles()">Seleccionar item</mat-slide-toggle>
+                            </div>
+                        </div>
+                        <div *ngIf="tipoMuestra === 'Orina'">
+                            <div class="col-auto text-center">
+                                <mat-form-field >
+                                    <input matInput placeholder="" value="Bacteriana" readonly  autocomplete="off">
+                                </mat-form-field>
+                                <mat-slide-toggle formControlName="bacterianaFormControl"  (change)="validarSlideToggles()">Seleccionar item</mat-slide-toggle>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button mat-raised-button type="button" class="botones mr-2" matStepperPrevious>
+                            Regresar
+                        </button>
+                        <button mat-raised-button type="button" class="botones" (click)="asociar()"
+                            matStepperNext [disabled]="habilitarAsociar === false">
                             Asociar
                         </button>
                     </div>
                 </form>
+
             </mat-step>
         </mat-horizontal-stepper>
     </mat-card>

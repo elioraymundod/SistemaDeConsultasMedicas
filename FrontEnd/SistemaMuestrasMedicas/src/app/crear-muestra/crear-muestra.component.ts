@@ -29,7 +29,7 @@ export class CrearMuestraComponent implements OnInit {
   cantidadMuestras: any;
   date: Date;
   nitLogin: any;
-  fechaVencimiento: any;
+  fechaVencimiento: Date;
 
   constructor(private _formBuilder: FormBuilder,
               private muestrasService: MuestrasService,// preguntar a Elio  
@@ -47,6 +47,7 @@ export class CrearMuestraComponent implements OnInit {
     });
 
       this.date = new Date();
+      this.fechaVencimiento = new Date();
   }
 
   async ngOnInit() {
@@ -95,7 +96,7 @@ export class CrearMuestraComponent implements OnInit {
             presentacion: this.crearMuestraFormGroup.get('PresentacionFormControl')?.value,
             cantidadUnidades: Number(this.crearMuestraFormGroup.get('cantidadFormControl')?.value) ,
             adjunto: formData,
-            fecha_vencimiento: '2021-01-01',
+            fecha_vencimiento: this.datePipe.transform(this.fechaVencimiento, 'yyyy-MM-dd HH:mm:ss'),
             fecha_creacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
             usuario_creacion: 'master' ,
             ip_usuario_creacion: '10.11.200.74',
@@ -175,6 +176,32 @@ export class CrearMuestraComponent implements OnInit {
          //Respuesta del servidor
          console.log("Data: ", data);
       });
+    }
+  }
+
+  calcularFechaVencimiento() {
+    let item = this.crearMuestraFormGroup.get('tipoMuestraFormControl')?.value;
+    console.log(item)
+    switch(item) {
+      case 1:
+        this.fechaVencimiento.setDate(this.fechaVencimiento.getDate() + 10) 
+        console.log(this.fechaVencimiento)
+        break;
+
+      case 2:
+        this.fechaVencimiento.setDate(this.fechaVencimiento.getDate() + 2) 
+        console.log(this.fechaVencimiento)
+        break;
+
+      case 3:
+        this.fechaVencimiento.setDate(this.fechaVencimiento.getDate() + 1) 
+        console.log(this.fechaVencimiento)
+        break;
+
+      case 4:
+        this.fechaVencimiento.setDate(this.fechaVencimiento.getDate() + 2) 
+        console.log(this.fechaVencimiento)
+        break;
     }
   }
 

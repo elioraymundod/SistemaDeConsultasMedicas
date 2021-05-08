@@ -272,7 +272,7 @@ export class MantenimientoSolicitudesComponent implements OnInit {
         this.router.navigate([`mantenimiento-solicitudes/${this.nitLogin}/informacion-expediente/`, complementoRuta]);
         break;
       case '4': // muestras
-        this.router.navigate(['asociar/', complementoRuta]);
+        this.router.navigate([`mantenimiento-solicitudes/${this.nitLogin}/asociar/`, complementoRuta]);
         break;
       case '5': // trazabilidad
         this.router.navigate([`mantenimiento-solicitudes/${this.nitLogin}/trazabilidad/${complementoRuta}`])

@@ -82,6 +82,8 @@ CREATE TABLE `muestras` (
   `unidad_medica` int NOT NULL,
   `presentacion` varchar(2000) NOT NULL, 
   `cantidadUnidades` int NOT NULL, 
+  `cantidadMuestras` int,
+  `itemsAsociados` varchar(10000), 
   `adjunto` blob null,
   `codigo_estado` int NOT NULL,
   `fecha_vencimiento` datetime NOT NULL,

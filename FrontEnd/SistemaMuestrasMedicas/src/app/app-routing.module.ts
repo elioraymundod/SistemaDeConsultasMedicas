@@ -16,7 +16,7 @@ import { SeguimientoSolicitudComponent } from './seguimiento-solicitud/seguimien
 const routes: Routes = [
   {path: 'mantenimiento-solicitudes/:nit_login/creacionSolicitud', component: CreacionSolicitudComponent},
   {path: 'mantenimiento-solicitudes/:nit_login/crearMuestra',component: CrearMuestraComponent},
-  {path: 'asociar/:codigo_solicitud',component: AsociarComponent},
+  {path: 'mantenimiento-solicitudes/:nit_login/asociar/:codigo_solicitud',component: AsociarComponent},
   {path: 'mantenimiento-solicitudes/:nit_login', component: MantenimientoSolicitudesComponent},
   {path: 'mantenimiento-solicitudes/:nit_login/informacion-cliente/:codigo_solicitud', component: InformacionClienteComponent},
   {path: 'mantenimiento-solicitudes/:nit_login/informacion-expediente/:codigo_solicitud', component: InformacionExpedienteComponent},

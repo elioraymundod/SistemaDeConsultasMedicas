@@ -14,6 +14,21 @@ module.exports={
         })
     },
 
+    agregarItems(muestra){
+        return new Promise((resolve,reject)=>{
+            let query='UPDATE controlquejasdb.puntos_atencion SET codigo_estado = ?, nombre_punto_atencion=?, fecha_modificacion = ? WHERE codigo_punto_atencion = ?';
+            console.log(muestra)
+            con.query(query,[muestra.codigo_estado,
+                muestra.nombre_punto_atencion,
+                muestra.fecha_modificacion,
+                muestra.codigo_punto_atencion],(err,rows)=>{
+                if(err) reject(err);
+                else resolve (true);
+
+            });
+        });
+    },
+
     insertMuestras(muestras){
         return new Promise((resolve,reject)=>{
             let query='INSERT INTO muestras_medicas_db.muestras SET ?';

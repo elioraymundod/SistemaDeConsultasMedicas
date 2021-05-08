@@ -17,7 +17,7 @@
                                 <!--Desplegable tipo muestra-->
                             <mat-form-field appearance="fill" class="col-lg-4 col-md-4 col-sm-12">
                                 <mat-label>Tipo Muestra</mat-label>
-                                <mat-select formControlName= "tipoMuestraFormControl">
+                                <mat-select formControlName= "tipoMuestraFormControl" (ngModelChange)="calcularFechaVencimiento()">
                                      <mat-option *ngFor="let opcion of listaTipoMuestra" [value]="opcion.codigo_dato_catalogo">
                                     {{opcion.nombre}}
                                   </mat-option>
