@@ -171,7 +171,7 @@ export class CreacionSolicitudComponent implements OnInit {
             telefonos: this.soporteYContactoFormGroup.get('telefonosFormControl')?.value,
             email: this.soporteYContactoFormGroup.get('emailFormControl')?.value,
             fecha_creacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
-            usuario_creacion: 'master',
+            usuario_creacion: this.nitLogin,
             ip_usuario_creacion: '0.0.0.0',
             fecha_modificacion: null,
             usuario_modificacion: '',

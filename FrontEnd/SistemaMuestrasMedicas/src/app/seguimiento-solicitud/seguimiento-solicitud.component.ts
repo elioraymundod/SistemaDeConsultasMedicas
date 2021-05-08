@@ -19,6 +19,7 @@ export class SeguimientoSolicitudComponent implements OnInit {
   codigoEstado: any;
   auxEstado: any;
   nit: any;
+  usuarioCrea: any;
 
   constructor(private _formBuilder: FormBuilder,
     private router: Router,
@@ -53,6 +54,7 @@ export class SeguimientoSolicitudComponent implements OnInit {
             this.informacionFormGroup.get('descripcionFormControl')?.setValue(res[0].descripcion);
             this.informacionFormGroup.get('estadoActualFormControl')?.setValue(res[0].estado)
             this.codigoEstado = res[0].codigo_estado;
+            this.usuarioCrea = res[0].usuario_creacion;
             switch(this.auxEstado) {
               case '1':
                 this.informacionFormGroup.get('nuevoEstadoFormControl')?.setValue("Analisis");
@@ -80,7 +82,7 @@ export class SeguimientoSolicitudComponent implements OnInit {
         break;
 
       case '2':
-
+        this.rechazar();
         break;
       
       case '3':
@@ -139,4 +141,23 @@ export class SeguimientoSolicitudComponent implements OnInit {
     this.regresarBandejaCentralizador();
   }
 
+  rechazar() {
+    const solicitud = {
+      codigo_solicitud: this.codigoSolicitud,
+      usuario_asignacion: this.usuarioCrea,
+      codigo_estado: 14,
+      fecha_modificacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
+      usuario_modificacion: this.nit,
+      ip_usuario_modificacion: '192.168.1.18'
+    }
+    this.solicitudesService.asignarSolicitud(solicitud).subscribe(res => {
+      Swal.fire({
+        titleText: `El cambio de estado a la solicitud se realizó con éxito.`,
+        icon: 'success',
+        showCloseButton: true,
+        showConfirmButton: false
+      });
+    });
+    this.regresarBandejaCentralizador();
+  }
 }

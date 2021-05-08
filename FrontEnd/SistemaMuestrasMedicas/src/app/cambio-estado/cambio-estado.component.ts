@@ -19,6 +19,7 @@ export class CambioEstadoComponent implements OnInit {
   date: Date;
   codigoEstado: any;
   nitLogin: any;
+  usuarioCrea: any;
 
   constructor(private _formBuilder: FormBuilder,
               private router: Router,
@@ -50,6 +51,7 @@ export class CambioEstadoComponent implements OnInit {
             this.informacionFormGroup.get('descripcionFormControl')?.setValue(res[0].descripcion);
             this.informacionFormGroup.get('estadoActualFormControl')?.setValue(res[0].estado)
             this.codigoEstado = res[0].codigo_estado;
+            this.usuarioCrea = res[0].usuario_creacion;
             switch(res[0].codigo_estado) {
               
               case 8:
@@ -77,6 +79,7 @@ export class CambioEstadoComponent implements OnInit {
       case 9:
       this.asignar();
       break;
+
     }
   }
 
@@ -89,7 +92,7 @@ export class CambioEstadoComponent implements OnInit {
         usuario_asignacion: this.nitCentralizador,
         codigo_estado: 10,
         fecha_modificacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
-        usuario_modificacion: 'master',
+        usuario_modificacion: this.nitLogin,
         ip_usuario_modificacion: '192.168.1.18'
       }
       console.log(solicitud)
@@ -106,10 +109,10 @@ export class CambioEstadoComponent implements OnInit {
       const historial = {
         codigo_historial: 0,
         codigo_solicitud: this.codigoSolicitud,
-        usuario: '100255426',
+        usuario: this.nitLogin,
         codigo_estado: 10,
         fecha_creacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
-        usuario_creacion: 'master',
+        usuario_creacion: this.nitLogin,
         ip_usuario_creacion: '192.168.1.18',
         fecha_modificacion: null,
         usuario_modificacion: null,
@@ -130,7 +133,7 @@ export class CambioEstadoComponent implements OnInit {
       usuario_asignacion: null,
       codigo_estado: 9,
       fecha_modificacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
-      usuario_modificacion: 'master',
+      usuario_modificacion: this.nitLogin,
       ip_usuario_modificacion: '192.168.1.18'
     }
     this.solicitudesService.asignarSolicitud(solicitud).subscribe(res => {
@@ -147,7 +150,7 @@ export class CambioEstadoComponent implements OnInit {
       usuario: '100255426',
       codigo_estado: 9,
       fecha_creacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
-      usuario_creacion: 'master',
+      usuario_creacion: this.nitLogin,
       ip_usuario_creacion: '192.168.1.18',
       fecha_modificacion: null,
       usuario_modificacion: null,
@@ -160,6 +163,8 @@ export class CambioEstadoComponent implements OnInit {
     });
     this.regresarAMantenimientoSolicitudes();
   }
+
+
 
   regresarAMantenimientoSolicitudes() {
     this.router.navigate(['mantenimiento-solicitudes/', this.nitLogin]);

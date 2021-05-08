@@ -32,6 +32,7 @@ export class MantenimientoSolicitudesComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   displayedColumns = ['codigo_solicitud', 'no_expediente', 'nit', 'no_soporte', 'tipo_solicitud', 'usuario', 'estado', 'fecha_creacion', 'cantidad_de_muestras', 'dias_de_items', 'documentos', 'dias_vencimiento', 'accion'];
   dataSource = new MatTableDataSource();
+  soliclitudesRechazadas = new MatTableDataSource();
   dataSourceExcel = new MatTableDataSource();
   nitLogin: any;
 
@@ -67,6 +68,12 @@ export class MantenimientoSolicitudesComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe(async res => {
       if(res.has('nit_login')) {
         this.nitLogin = res.get('nit_login')
+      }
+    })
+
+    this.solicitudesService.getSolicitudesByEstadoAndUsuario(14, this.nitLogin).subscribe(res=> {
+      if(res.length !== 0){
+        this.soliclitudesRechazadas.data = res;
       }
     })
 

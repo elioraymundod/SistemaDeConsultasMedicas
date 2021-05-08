@@ -144,6 +144,27 @@ module.exports={
         })
     }, 
 
+    getSolicitudesByEstadoAndUsuario(estado, usuario){
+        return new Promise((resolve,reject)=>{
+            con.query('SELECT  mm.*, '+
+            '(select ca.nombre from muestras_medicas_db.datos_catalogos as ca where ca.codigo_dato_catalogo = mm.codigo_tipo_solicitud) as tipo_solicitud,  '+
+            '(select us.nombre_usuario from muestras_medicas_db.usuarios as us where mm.usuario_asignacion = us.nit_usuario) as usuario,  '+
+            '(select caa.nombre from muestras_medicas_db.datos_catalogos as caa where mm.codigo_estado = caa.codigo_dato_catalogo) as estado,  '+
+            '(select csa.nombre from muestras_medicas_db.datos_catalogos as csa where mm.codigo_tipo_soporte = csa.codigo_dato_catalogo) as tipo_soporte,  '+
+            '(select sol.nombre from muestras_medicas_db.datos_catalogos as sol where mm.codigo_tipo_solicitante = sol.codigo_dato_catalogo) as tipo_solicitante,  '+
+            '(select so.nombre_cliente from muestras_medicas_db.clientes as so where mm.nit = so.nit_cliente) as solicitante,  '+
+            '(select ex.observaciones from muestras_medicas_db.expedientes as ex where mm.no_expediente = ex.no_expediente) as observaciones_expediente,  '+
+            '(select di.direccion_cliente from muestras_medicas_db.clientes as di where mm.nit = di.nit_cliente) as direccion_cliente, '+
+            '(select tel.telefonos from muestras_medicas_db.clientes as tel where mm.nit = tel.nit_cliente) as telefono_cliente,  '+
+            '(select em.email from muestras_medicas_db.clientes as em where mm.nit = em.nit_cliente) as email_cliente   '+
+            'FROM muestras_medicas_db.solicitudes_de_muestras as mm  '+
+            'where mm.codigo_estado = ? and mm.usuario_asignacion = ?', [estado, usuario],(err,rows)=>{
+                if(err) reject(err);
+                else resolve(rows);
+            })
+        })
+    }, 
+
     getCentralizador(){
         return new Promise((resolve,reject)=>{
             con.query('SELECT * FROM muestras_medicas_db.usuarios as us '+
