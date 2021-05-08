@@ -1,7 +1,8 @@
 import { DatePipe } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
 import { CatalogosService } from '../Services/catalogos.service';
@@ -20,30 +21,41 @@ interface Opciones{
 export class CrearMuestraComponent implements OnInit {
 
   isLinear=false;
+  selectedFile: any;
   crearMuestraFormGroup: FormGroup;
   listaTipoMuestra: any;
   listaUnidadDeMedida: any;
   numeroMuestras: any;
   cantidadMuestras: any;
   date: Date;
+  nitLogin: any;
+  fechaVencimiento: any;
 
   constructor(private _formBuilder: FormBuilder,
-    private muestrasService: MuestrasService,// preguntar a Elio  
+              private muestrasService: MuestrasService,// preguntar a Elio  
               private servicios: CatalogosService,
               private datePipe: DatePipe,
-              private router: Router) {
+              private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private http:HttpClient) {
     this.crearMuestraFormGroup = this._formBuilder.group({
       tipoMuestraFormControl: ['', [Validators.required]],
       cantidadMuestraFormControl:['',[Validators.required]],
       cantidadFormControl: ['', [Validators.required, Validators.minLength(1)]],
       PresentacionFormControl: ['', [Validators.required, Validators.minLength(10)]],
-      //archivoMuestraFormControl:['',[Validators.required]],   
+      archivoMuestraFormControl:['',[Validators.required]],   
     });
 
       this.date = new Date();
   }
 
   async ngOnInit() {
+    this.activatedRoute.paramMap.subscribe(async res => {
+      if(res.has('nit_login')) {
+        this.nitLogin = res.get('nit_login'); 
+      }
+    })
+    
     this.servicios.getTipoMuestra().subscribe(res => {
       this.listaTipoMuestra=res; 
     });
@@ -71,16 +83,20 @@ export class CrearMuestraComponent implements OnInit {
       cancelButtonText: `Cancelar`, 
     }).then((result) => {
       if (result.isConfirmed) {
-            this.generarCodigo();
+          this.generarCodigo();
+          const formData = new FormData();
+          formData.append('file', this.selectedFile);
+
           const muestras = {
             codigo_muestra: this.numeroMuestras,
+            codigo_estado: 35,
             codigo_tipo_muestra: this.crearMuestraFormGroup.get('tipoMuestraFormControl')?.value,
             unidad_medica: this.crearMuestraFormGroup.get('cantidadMuestraFormControl')?.value,
             presentacion: this.crearMuestraFormGroup.get('PresentacionFormControl')?.value,
             cantidadUnidades: Number(this.crearMuestraFormGroup.get('cantidadFormControl')?.value) ,
-            adjunto: null,//pendiente ver como se mete 
+            adjunto: formData,
             fecha_vencimiento: '2021-01-01',
-            fecha_creacion: this.datePipe.transform(this.date, 'yyyy-MM-dd'),
+            fecha_creacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
             usuario_creacion: 'master' ,
             ip_usuario_creacion: '10.11.200.74',
             fecha_modificacion: null,
@@ -96,7 +112,8 @@ export class CrearMuestraComponent implements OnInit {
         }, err => {
           Swal.fire('No se pudo almacenar la muestra', '', 'error')
         });
-             console.log(muestras)   
+        console.log(muestras)   
+        this.regresarAMantenimientoSolicitudes()
       } else if (result.isDenied) {
         // Swal.fire('Changes are not saved', '', 'info')
       } else {
@@ -116,8 +133,55 @@ export class CrearMuestraComponent implements OnInit {
   }
 
   regresarAMantenimientoSolicitudes() {
-    this.router.navigate(['mantenimiento-solicitudes']);
+    this.router.navigate(['mantenimiento-solicitudes', this.nitLogin]);
   }
   
+  fileSelected(event: any)
+  {
+    this.selectedFile = <File>event.target.files[0];
+    if(this.selectedFile.type !== "application/pdf") {
+      Swal.fire({
+        icon: 'error',
+        title: 'Debe subir un archivo PDF'
+      })
+      this.crearMuestraFormGroup.get('archivoMuestraFormControl')?.reset()
+    } 
+    if (this.selectedFile.size > 5000000) {
+      Swal.fire({
+        icon: 'error',
+        title: 'El tamaño máximo permitido es de 5 MB'
+      })
+      this.crearMuestraFormGroup.get('archivoMuestraFormControl')?.reset()
+    }
+    console.log(this.selectedFile)
+  };
+
+  subirArchivo()
+  {
+    const formData = new FormData();
+    formData.append('file', this.selectedFile);
+
+    if (this.selectedFile == undefined)
+    {
+      window.alert("Se debe seleccionar alguna imagen para poder realizar la subida del archivo al servidor.")
+      return;
+    }
+    else
+    {
+      //Metodo POST 
+      this.http.post<myData>('authentication/subirArchivoLogo.php', formData)
+      .subscribe(data=>
+      {
+         //Respuesta del servidor
+         console.log("Data: ", data);
+      });
+    }
+  }
 
 }
+
+
+interface myData
+  {
+    mensaje: string;
+  };

@@ -30,6 +30,7 @@ export class CreacionSolicitudComponent implements OnInit {
   tipoSolicitud: any;
   cantidadSolicitudes: any;
   numeroSolicitud: any;  
+  nitLogin: any;
 
   constructor(private _formBuilder: FormBuilder, 
               private catalogosService: CatalogosService,
@@ -61,6 +62,12 @@ export class CreacionSolicitudComponent implements OnInit {
    }
 
   async ngOnInit() {
+    this.activatedRoute.paramMap.subscribe(async res => {
+      if(res.has('nit_login')) {
+        this.nitLogin = res.get('nit_login')
+      }
+    })
+
     // Obtener tipo de solicitante
     await this.catalogosService.getTipoSolicitante().subscribe(res => {
       this.tipoSolicitante = res;
@@ -154,7 +161,7 @@ export class CreacionSolicitudComponent implements OnInit {
             no_expediente: this.crearSolicitudFormGroup.get('noExpedienteFormControl')?.value,
             codigo_tipo_soporte: this.soporteYContactoFormGroup.get('tipoSoporteFormControl')?.value,
             codigo_estado: 8,
-            usuario_asignacion: '44880459848',
+            usuario_asignacion: null,
             no_soporte: this.soporteYContactoFormGroup.get('numeroSoporteFormControl')?.value,
             nit: this.crearSolicitudFormGroup.get('nitFormControl')?.value,
             cantidad_de_muestras: 0,
@@ -163,19 +170,38 @@ export class CreacionSolicitudComponent implements OnInit {
             descripcion: this.crearSolicitudFormGroup.get('descripcionFormControl')?.value,
             telefonos: this.soporteYContactoFormGroup.get('telefonosFormControl')?.value,
             email: this.soporteYContactoFormGroup.get('emailFormControl')?.value,
-            fecha_creacion: this.datePipe.transform(this.date, 'yyyy-MM-dd'),
+            fecha_creacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
             usuario_creacion: 'master',
             ip_usuario_creacion: '0.0.0.0',
             fecha_modificacion: null,
             usuario_modificacion: '',
             ip_usuario_modificacion: ''
           }
-       this.solicitudesService.insertSolicitud(solicitud).subscribe(res => {
-          Swal.fire(`Solicitud creada con exito, el numero de su solicitud es ${this.numeroSolicitud}`, '', 'success')
-        }, err => {
-          Swal.fire('No se pudo almacenar la solicitud', '', 'error')
-        });
-             console.log(solicitud)   
+          this.solicitudesService.insertSolicitud(solicitud).subscribe(res => {
+              Swal.fire(`Solicitud creada con exito, el numero de su solicitud es ${this.numeroSolicitud}`, '', 'success')
+              this.regresarAMantenimientoSolicitudes();
+            }, err => {
+              Swal.fire('No se pudo almacenar la solicitud', '', 'error')
+          });
+
+          const historial = {
+            codigo_historial: 0,
+            codigo_solicitud: this.numeroSolicitud,
+            usuario: '100255426',
+            codigo_estado: 8,
+            fecha_creacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
+            usuario_creacion: 'master',
+            ip_usuario_creacion: '192.168.1.18',
+            fecha_modificacion: null,
+            usuario_modificacion: null,
+            ip_usuario_modificacion: null
+          }
+          this.solicitudesService.insertHistorial(historial).subscribe(res => {
+            console.log('se creo correctamente el historial, ', historial)
+          }, err => {
+            Swal.fire('No se pudo almacenar la solicitud', '', 'error')
+          });
+          console.log(solicitud)   
       } else if (result.isDenied) {
         // Swal.fire('Changes are not saved', '', 'info')
       } else {
@@ -195,6 +221,6 @@ export class CreacionSolicitudComponent implements OnInit {
   }
 
   regresarAMantenimientoSolicitudes() {
-    this.router.navigate(['mantenimiento-solicitudes']);
+    this.router.navigate(['mantenimiento-solicitudes/', this.nitLogin]);
   }
 }

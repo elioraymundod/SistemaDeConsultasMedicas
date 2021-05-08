@@ -1,9 +1,10 @@
+import { DatePipe } from '@angular/common';
 import { ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
 import { CatalogosService } from '../Services/catalogos.service';
@@ -27,16 +28,20 @@ export class MantenimientoSolicitudesComponent implements OnInit {
   filtrosFormGroup: FormGroup;
   accionesFormGroup: FormGroup;
   mostrarTabla: boolean;
+  date: Date;
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   displayedColumns = ['codigo_solicitud', 'no_expediente', 'nit', 'no_soporte', 'tipo_solicitud', 'usuario', 'estado', 'fecha_creacion', 'cantidad_de_muestras', 'dias_de_items', 'documentos', 'dias_vencimiento', 'accion'];
   dataSource = new MatTableDataSource();
   dataSourceExcel = new MatTableDataSource();
+  nitLogin: any;
 
 
   constructor(private catalogosService: CatalogosService,
               private _formBuilder: FormBuilder,
               private solicitudesService: SolicitudesService,
-              private router: Router) {
+              private router: Router,
+              private datePipe: DatePipe,
+              private activatedRoute: ActivatedRoute) {
 
     this.filtrosFormGroup = this._formBuilder.group({
       codigoSolicitudFormControl: ['', [Validators.pattern('([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9][0-9])')]],
@@ -55,9 +60,16 @@ export class MantenimientoSolicitudesComponent implements OnInit {
     })
 
     this.mostrarTabla = false;
+    this.date = new Date();
   }
 
   ngOnInit(){
+    this.activatedRoute.paramMap.subscribe(async res => {
+      if(res.has('nit_login')) {
+        this.nitLogin = res.get('nit_login')
+      }
+    })
+
     // Obtener los tipos de solicitud
     this.catalogosService.getTipoSolicitud().subscribe(res => {
       this.tipoSolicitud = res;
@@ -204,8 +216,8 @@ export class MantenimientoSolicitudesComponent implements OnInit {
       if (fechaHasta === '') {
         fechaHasta = '0';
       }
-
-      this.solicitudesService.getSolicitudes(codigoSolicitud, noExpediente, noSoporte, usuarioAsignacion, nit, String(tipoSolicitud), String(estadoSolicitud), fechaDe, fechaHasta).subscribe(res => {
+      console.log(Number(estadoSolicitud))
+      this.solicitudesService.getSolicitudes(codigoSolicitud, noExpediente, noSoporte, usuarioAsignacion, nit, String(tipoSolicitud), Number(estadoSolicitud), fechaDe, fechaHasta).subscribe(res => {
         if(res.length !== 0) {
           for(let i = 0; i< res.length; i++) {
             res[i].fecha_creacion = String(moment(res[i].fecha_creacion.replace('+0000', '')).format('DD-MM-YYYY'))
@@ -254,29 +266,86 @@ export class MantenimientoSolicitudesComponent implements OnInit {
         this.solicitudesService.exportToExcel(this.dataSourceExcel.data, 'resultado_consulta');
         break;
       case '2': // Informacion general
-        this.router.navigate(['mantenimiento-solicitudes/informacion-general/', complementoRuta]);
+        this.router.navigate([`mantenimiento-solicitudes/${this.nitLogin}/informacion-general/`, complementoRuta]);
         break;
       case '3': // Informacion expediente
-        this.router.navigate(['mantenimiento-solicitudes/informacion-expediente/', complementoRuta]);
+        this.router.navigate([`mantenimiento-solicitudes/${this.nitLogin}/informacion-expediente/`, complementoRuta]);
         break;
       case '4': // muestras
         this.router.navigate(['asociar/', complementoRuta]);
         break;
-      case '5':
-
+      case '5': // trazabilidad
+        this.router.navigate([`mantenimiento-solicitudes/${this.nitLogin}/trazabilidad/${complementoRuta}`])
         break;
       case '6':
 
         break;
       case '7':
+        if (datos.codigo_estado === 8) {
+          Swal.fire({
+            title: 'Esta seguro que desea eliminar esta solicitud?',
+            //text: `Codigo Solicitud: ` + ,
+            html: '<b>Codigo Solicitud:</b> ' + datos.codigo_solicitud + '<br>' +
+            '<b>Tipo solicitante: </b>' + datos.tipo_solicitante + '<br>' +
+            '<b>Tipo solicitud: </b>' + datos.tipo_solicitud + '<br>' +
+            '<b>Cantidad muestras: </b>'+ datos.cantidad_de_muestras + '<br>' +
+            '<b>Cantidad items: </b>' +  datos.dias_de_items + '<br>' +
+            '<b>Descripcion: </b>'+  datos.descripcion +'<br>',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Cancelar'
+            
+          }).then((result) => {
+            if (result.isConfirmed) {
+              const solicitud = {
+                codigo_solicitud: datos.codigo_solicitud,
+                codigo_estado: 17,
+                fecha_modificacion: this.datePipe.transform(this.date, 'yyyy-MM-dd'),
+                usuario_modificacion: 'master',
+                ip_usuario_modificacion: '192.168.1.18'
+              }
+              this.solicitudesService.eliminarSolicitud(solicitud).subscribe(res=> {
+                console.log('resultado de eliminar ', res)
+              });
+              Swal.fire(
+                'La solicitud ha sido eliminada con exito!',
+                '',
+                'success'
+              )
+              this.accionesFormGroup.get('opcionFormControl')?.setValue('Seleccione una opcion')
+              this.limpiarCampos();
+            } else {
+              this.accionesFormGroup.get('opcionFormControl')?.setValue('Seleccione una opcion')
+            }
+          })
+        } else {
+          Swal.fire({
+            title: 'Solo puede eliminar solicitudes que esten en estado Creado',
+            //text: `Codigo Solicitud: ` + ,
+            icon: 'warning',
+            confirmButtonText: 'Aceptar'
+          })
+          this.accionesFormGroup.get('opcionFormControl')?.setValue('Seleccione una opcion');
+        }
 
+        
         break;
       case '8':
 
         break;
       case '9':
-        this.router.navigate(['mantenimiento-solicitudes/informacion-cliente/', complementoRuta]);
-        break;      
+        this.router.navigate([`mantenimiento-solicitudes/${this.nitLogin}/informacion-cliente/`, complementoRuta]);
+        break;  
+        
+      case '10':
+        this.router.navigate(['cambio-estado/', complementoRuta]);
+        break;
+      case '11':
+        this.router.navigate(['cambio-estado/', complementoRuta]);
+        break;
     }
   }
 
@@ -293,11 +362,29 @@ export class MantenimientoSolicitudesComponent implements OnInit {
   ];
 
   muestras() {
-    this.router.navigate(['crearMuestra']);
+    this.router.navigate([`mantenimiento-solicitudes/${this.nitLogin}/crearMuestra`]);
+  }
+
+  cerrarSesion() {
+    Swal.fire({
+      title: 'Esta seguro que desea cerrar sesion?',
+      //text: `Codigo Solicitud: ` + ,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No'
+      
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.router.navigate(['login']);
+      } 
+    })
   }
 
   crearSolicitud() {
-    this.router.navigate(['creacionSolicitud']);
+    this.router.navigate([`mantenimiento-solicitudes/${this.nitLogin}/creacionSolicitud`]);
   }
 
 }

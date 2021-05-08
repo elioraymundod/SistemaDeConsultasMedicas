@@ -11,6 +11,7 @@ import { SolicitudesService } from 'src/app/Services/solicitudes.service';
 })
 export class InformacionExpedienteComponent implements OnInit {
   informacionFormGroup: FormGroup;
+  nitLogin: any;
   
   constructor(private _formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
@@ -27,6 +28,7 @@ export class InformacionExpedienteComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe(async res => {
       if(res.has('codigo_solicitud')) {
         let codigoSolicitud = res.get('codigo_solicitud');
+        this.nitLogin = res.get('nit_login');
         this.solicitudesService.getSolicitudes(codigoSolicitud, '0', '0', '0', '0', '0', '0', '0', '0').subscribe(res => {
           if(res.length !== 0) {
             for(let i = 0; i< res.length; i++) {
@@ -43,7 +45,7 @@ export class InformacionExpedienteComponent implements OnInit {
   }
 
   regresarAMantenimientoSolicitudes() {
-    this.router.navigate(['mantenimiento-solicitudes']);
+    this.router.navigate(['mantenimiento-solicitudes/', this.nitLogin]);
   }
 
 }

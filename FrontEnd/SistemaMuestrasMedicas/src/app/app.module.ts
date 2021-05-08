@@ -20,6 +20,10 @@ import { InformacionExpedienteComponent } from './mantenimiento-solicitudes/info
 import { TrazabilidadComponent } from './mantenimiento-solicitudes/trazabilidad/trazabilidad.component';
 import { InformacionClienteComponent } from './mantenimiento-solicitudes/informacion-cliente/informacion-cliente.component';
 import { InformacionGeneralComponent } from './mantenimiento-solicitudes/informacion-general/informacion-general.component';
+import { CambioEstadoComponent } from './cambio-estado/cambio-estado.component';
+import { BandejaCentralizadorComponent } from './bandeja-centralizador/bandeja-centralizador.component';
+import { SeguimientoSolicitudComponent } from './seguimiento-solicitud/seguimiento-solicitud.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +35,11 @@ import { InformacionGeneralComponent } from './mantenimiento-solicitudes/informa
     InformacionExpedienteComponent,
     TrazabilidadComponent,
     InformacionClienteComponent,
-    InformacionGeneralComponent
+    InformacionGeneralComponent,
+    CambioEstadoComponent,
+    BandejaCentralizadorComponent,
+    SeguimientoSolicitudComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

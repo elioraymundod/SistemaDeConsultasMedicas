@@ -18,7 +18,6 @@
                             <mat-form-field appearance="fill" class="col-lg-4 col-md-4 col-sm-12">
                                 <mat-label>Tipo Muestra</mat-label>
                                 <mat-select formControlName= "tipoMuestraFormControl">
-    
                                      <mat-option *ngFor="let opcion of listaTipoMuestra" [value]="opcion.codigo_dato_catalogo">
                                     {{opcion.nombre}}
                                   </mat-option>
@@ -52,9 +51,7 @@
                                 <!--Espacio para adjuntar archivo--> 
                             <div>
                                 <mat-label>Adjuntar Archivo</mat-label>
-                                -
-                             <input type="file" name="archivoSubido" >
-                             <input type="submit" value="Subir Archivo">
+                             <input type="file" name="archivoSubido" formControlName="archivoMuestraFormControl" (change)="fileSelected($event)">
                         </div>
                         </div>
                         <!--Botones -->

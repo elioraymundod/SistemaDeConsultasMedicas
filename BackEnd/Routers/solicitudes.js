@@ -17,9 +17,66 @@ router.post('/solicitudes/muestras/medicas',(req,res)=>{
                     });
 });
 
+router.post('/historial/estados',(req,res)=>{
+    solicitudes.insertHistorialEstado(req.body)
+                    .then(solicitudes=>{
+                        res.status(200).send({
+                            mesage:'Se creo el historial correctamente'
+                        });
+                    })
+                    .catch(err=>{
+                        console.error(err);
+                        res.status(500).send({
+                            mesage:'Error al crear historial'
+                        });
+                    });
+});
+
 
 router.get('/solicitudes/:codigo_solicitud/:no_expediente/:no_soporte/:usuario_asignacion/:nit/:codigo_tipo_solicitud/:codigo_estado/:fecha_inicio/:fecha_fin',(req,res)=>{
-    solicitudes.getSolicitudes(req.params.codigo_solicitud, req.params.no_expediente, req.params.no_soporte, req.usuario_asignacion, req.nit, req.codigo_tipo_solicitud, req.codigo_estado, req.fecha_inicio, req.fecha_fin)
+    solicitudes.getSolicitudes(req.params.codigo_solicitud, req.params.no_expediente, req.params.no_soporte, req.params.usuario_asignacion, req.params.nit, req.params.codigo_tipo_solicitud, req.params.codigo_estado, req.params.fecha_inicio, req.params.fecha_fin)
+                    .then(solicitudes=>{
+                        res.status(200).send(solicitudes);
+                    })
+                    .catch(err=>{
+                        console.error(err);
+                        res.status(500).send({
+                            mesage:'Error al obtener datos'
+                        });
+                    });
+
+});
+
+router.get('/solicitudes/centralizador/:usuario_asignacion',(req,res)=>{
+    solicitudes.getSolicitudeByUsuarioAsignacion(req.params.usuario_asignacion)
+                    .then(solicitudes=>{
+                        res.status(200).send(solicitudes);
+                    })
+                    .catch(err=>{
+                        console.error(err);
+                        res.status(500).send({
+                            mesage:'Error al obtener datos'
+                        });
+                    });
+
+});
+
+router.get('/historial/estados/:codigo_solicitud',(req,res)=>{
+    solicitudes.getHistorialEstados(req.params.codigo_solicitud)
+                    .then(solicitudes=>{
+                        res.status(200).send(solicitudes);
+                    })
+                    .catch(err=>{
+                        console.error(err);
+                        res.status(500).send({
+                            mesage:'Error al obtener datos'
+                        });
+                    });
+
+});
+
+router.get('/login/:user/:pass',(req,res)=>{
+    solicitudes.getLogin(req.params.user, req.params.pass)
                     .then(solicitudes=>{
                         res.status(200).send(solicitudes);
                     })
@@ -33,7 +90,7 @@ router.get('/solicitudes/:codigo_solicitud/:no_expediente/:no_soporte/:usuario_a
 });
 
 router.get('/solicitudes/excel/:codigo_solicitud/:no_expediente/:no_soporte/:usuario_asignacion/:nit/:codigo_tipo_solicitud/:codigo_estado/:fecha_inicio/:fecha_fin',(req,res)=>{
-    solicitudes.getSolicitudesExcel(req.params.codigo_solicitud, req.params.no_expediente, req.params.no_soporte, req.usuario_asignacion, req.nit, req.codigo_tipo_solicitud, req.codigo_estado, req.fecha_inicio, req.fecha_fin)
+    solicitudes.getSolicitudesExcel(req.params.codigo_solicitud, req.params.no_expediente, req.params.no_soporte, req.params.usuario_asignacion, req.params.nit, req.params.codigo_tipo_solicitud, req.params.codigo_estado, req.params.fecha_inicio, req.params.fecha_fin)
                     .then(solicitudes=>{
                         res.status(200).send(solicitudes);
                     })
@@ -74,4 +131,49 @@ router.get('/obtener/all/solicitudes/creadas',(req,res)=>{
 
 });
 
+router.get('/obtener/usuarios/rnd',(req,res)=>{
+    solicitudes.getCentralizador()
+                    .then(solicitudes=>{
+                        res.status(200).send(solicitudes);
+                    })
+                    .catch(err=>{
+                        console.error(err);
+                        res.status(500).send({
+                            mesage:'Error al obtener datos'
+                        });
+                    });
+
+});
+
+
+router.put('/solicitudes/eliminar',(req,res)=>{
+    solicitudes.eliminarSolicitud(req.body)
+                    .then(solicitudes=>{
+                        res.status(200).send({
+                            mesage:'Se actualizaron los datos correctamente'
+                        });
+                    })
+                    .catch(err=>{
+                        console.error(err);
+                        res.status(500).send({
+                            mesage:'Error al actualizar datos'
+                        });
+                    });
+});
+
+router.put('/asignar',(req,res)=>{
+    console.log('asignar1')
+    solicitudes.asignarSolicitud(req.body)
+                    .then(solicitudes=>{
+                        res.status(200).send({
+                            mesage:'Se actualizaron los datos correctamente'
+                        });
+                    })
+                    .catch(err=>{
+                        console.error(err);
+                        res.status(500).send({
+                            mesage:'Error al actualizar datos'
+                        });
+                    });
+});
 module.exports= router;

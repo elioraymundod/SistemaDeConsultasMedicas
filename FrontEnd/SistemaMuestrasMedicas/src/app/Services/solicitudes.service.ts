@@ -20,6 +20,19 @@ export class SolicitudesService {
     return this.http.post(`${this.baseUrl}/solicitudes/muestras/medicas`,solicitud)
   }
 
+  public insertHistorial(solicitud: any):Observable<any>{
+    return this.http.post(`${this.baseUrl}/historial/estados`,solicitud)
+  }
+
+  public eliminarSolicitud(solicitud: any):Observable<any>{
+    return this.http.put(`${this.baseUrl}/solicitudes/eliminar`, solicitud)
+  }
+
+  public asignarSolicitud(solicitud: any):Observable<any>{
+    console.log('datos a enviar ' ,solicitud)
+    return this.http.put(`${this.baseUrl}/asignar`, solicitud)
+  }
+
   public getSolicitudes(codigoSolicitud: any, no_expediente: any, no_soporte: any, usuario_asignacion: any, nit: any, codigo_tipo_solicitud: any, codigo_estado: any, fecha_inicio: any, fecha_fin: any):Observable<any>{
     return this.http.get(`${this.baseUrl}/solicitudes/${codigoSolicitud}/${no_expediente}/${no_soporte}/${usuario_asignacion}/${nit}/${codigo_tipo_solicitud}/${codigo_estado}/${fecha_inicio}/${fecha_fin}`);
   }
@@ -30,6 +43,22 @@ export class SolicitudesService {
 
   public getSolicitudesByCodigo(codigoSolicitud: any):Observable<any>{
     return this.http.get(`${this.baseUrl}/solicitudes/por/codigo/${codigoSolicitud}`);
+  }
+
+  public getLogin(user: any, pass: any):Observable<any>{
+    return this.http.get(`${this.baseUrl}/login/${user}/${pass}`);
+  }
+
+  public getSolicitudesByCentralizador(usuarioAsignacion: any):Observable<any>{
+    return this.http.get(`${this.baseUrl}/solicitudes/centralizador/${usuarioAsignacion}`);
+  }
+
+  public getHistorialEstados(codigoSolicitud: any):Observable<any>{
+    return this.http.get(`${this.baseUrl}/historial/estados/${codigoSolicitud}`);
+  }
+
+  public getCentralizador():Observable<any>{
+    return this.http.get(`${this.baseUrl}/obtener/usuarios/rnd`);
   }
 
   public exportToExcel(json:any[], excelFileName: string): void{
