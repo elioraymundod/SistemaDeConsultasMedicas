@@ -16,12 +16,31 @@ module.exports={
 
     agregarItems(muestra){
         return new Promise((resolve,reject)=>{
-            let query='UPDATE controlquejasdb.puntos_atencion SET codigo_estado = ?, nombre_punto_atencion=?, fecha_modificacion = ? WHERE codigo_punto_atencion = ?';
+            let query='UPDATE muestras_medicas_db.muestras SET cantidadMuestras = ?, itemsAsociados = ?, fecha_modificacion = ?, usuario_modificacion = ?, ip_usuario_modificacion = ? WHERE codigo_muestra = ?';
             console.log(muestra)
-            con.query(query,[muestra.codigo_estado,
-                muestra.nombre_punto_atencion,
+            con.query(query,[muestra.cantidadMuestras,
+                muestra.itemsAsociados,
                 muestra.fecha_modificacion,
-                muestra.codigo_punto_atencion],(err,rows)=>{
+                muestra.usuario_modificacion,
+                muestra.ip_usuario_modificacion,
+                muestra.codigo_muestra],(err,rows)=>{
+                if(err) reject(err);
+                else resolve (true);
+
+            });
+        });
+    },
+
+    agregarItemsSolicitud(muestra){
+        return new Promise((resolve,reject)=>{
+            let query='UPDATE muestras_medicas_db.solicitudes_de_muestras SET cantidad_de_muestras = ?, dias_de_items = ?, fecha_modificacion = ?, usuario_modificacion = ?, ip_usuario_modificacion = ? WHERE codigo_solicitud = ?';
+            console.log(muestra)
+            con.query(query,[muestra.cantidad_de_muestras,
+                muestra.dias_de_items,
+                muestra.fecha_modificacion,
+                muestra.usuario_modificacion,
+                muestra.ip_usuario_modificacion,
+                muestra.codigo_solicitud],(err,rows)=>{
                 if(err) reject(err);
                 else resolve (true);
 
@@ -39,9 +58,28 @@ module.exports={
         });
     },
 
+    insertEtiqueta(muestras){
+        return new Promise((resolve,reject)=>{
+            let query='INSERT INTO muestras_medicas_db.etiqueta_de_muestra SET ?';
+            con.query(query,[muestras],(err,rows)=>{
+                if(err) reject(err);
+                else resolve (true);
+            }); 
+        });
+    },
+
     getAllMuestras(){
         return new Promise((resolve,reject)=>{
             con.query('select * from muestras_medicas_db.muestras',(err,rows)=>{
+                if(err) reject(err);
+                else resolve(rows);
+            })
+        })
+    }, 
+
+    getItemsAsociados(codigo_muestra){
+        return new Promise((resolve,reject)=>{
+            con.query('select m.* from muestras_medicas_db.muestras m where m.codigo_muestra = ?', codigo_muestra,(err,rows)=>{
                 if(err) reject(err);
                 else resolve(rows);
             })

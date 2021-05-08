@@ -18,6 +18,7 @@ export class CambioEstadoComponent implements OnInit {
   codigoSolicitud: any;
   date: Date;
   codigoEstado: any;
+  nitLogin: any;
 
   constructor(private _formBuilder: FormBuilder,
               private router: Router,
@@ -38,6 +39,7 @@ export class CambioEstadoComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe(async res => {
       if(res.has('codigo_solicitud')) {
         this.codigoSolicitud = res.get('codigo_solicitud');
+        this.nitLogin = res.get('nit_login')
         this.solicitudesService.getSolicitudes(this.codigoSolicitud, '0', '0', '0', '0', '0', '0', '0', '0').subscribe(res => {
           if(res.length !== 0) {
             for(let i = 0; i< res.length; i++) {
@@ -160,7 +162,7 @@ export class CambioEstadoComponent implements OnInit {
   }
 
   regresarAMantenimientoSolicitudes() {
-    this.router.navigate(['mantenimiento-solicitudes']);
+    this.router.navigate(['mantenimiento-solicitudes/', this.nitLogin]);
   }
 
 }

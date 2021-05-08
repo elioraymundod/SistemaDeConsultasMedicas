@@ -17,6 +17,20 @@ router.get('/muestras/:codigoMuestra',(req,res)=>{
 
 });
 
+router.get('/muestras/items/asociados/:codigo_muestra',(req,res)=>{
+    muestras.getItemsAsociados(req.params.codigo_muestra)
+                    .then(muestras=>{
+                        res.status(200).send(muestras);
+                    })
+                    .catch(err=>{
+                        console.error(err);
+                        res.status(500).send({
+                            mesage:'Error al obtener datos'
+                       });
+                    });
+
+});
+
 router.post('/muestras/muestras/medicas',(req,res)=>{
     muestras.insertMuestras(req.body)
                     .then(muestras=>{
@@ -28,6 +42,51 @@ router.post('/muestras/muestras/medicas',(req,res)=>{
                         console.error(err);
                         res.status(500).send({
                             mesage:'Error al crear muestra'
+                        });
+                    });
+});
+
+router.post('/etiquetea/muestra',(req,res)=>{
+    muestras.insertEtiqueta(req.body)
+                    .then(muestras=>{
+                        res.status(200).send({
+                            mesage:'Se creo la muestra correctamente'
+                        });
+                    })
+                    .catch(err=>{
+                        console.error(err);
+                        res.status(500).send({
+                            mesage:'Error al crear muestra'
+                        });
+                    });
+});
+
+router.put('/muestras/items',(req,res)=>{
+    muestras.agregarItems(req.body)
+                    .then(muestras=>{
+                        res.status(200).send({
+                            mesage:'Se actualizaron los datos correctamente'
+                        });
+                    })
+                    .catch(err=>{
+                        console.error(err);
+                        res.status(500).send({
+                            mesage:'Error al actualizar datos'
+                        });
+                    });
+});
+
+router.put('/solicitudes/items/asociados',(req,res)=>{
+    muestras.agregarItemsSolicitud(req.body)
+                    .then(muestras=>{
+                        res.status(200).send({
+                            mesage:'Se actualizaron los datos correctamente'
+                        });
+                    })
+                    .catch(err=>{
+                        console.error(err);
+                        res.status(500).send({
+                            mesage:'Error al actualizar datos'
                         });
                     });
 });

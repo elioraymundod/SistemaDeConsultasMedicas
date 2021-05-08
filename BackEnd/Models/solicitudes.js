@@ -155,6 +155,16 @@ module.exports={
         })
     }, 
 
+    getEtiquetasMuestras(codigo_solicitud){
+        return new Promise((resolve,reject)=>{
+            con.query('SELECT * FROM muestras_medicas_db.etiqueta_de_muestra as us '+
+            'where us.codigo_solicitud = ? ', codigo_solicitud,(err,rows)=>{
+                if(err) reject(err);
+                else resolve(rows);
+            })
+        })
+    }, 
+
     getLogin(user, pass){
         return new Promise((resolve,reject)=>{
             con.query('SELECT * FROM muestras_medicas_db.usuarios as us '+

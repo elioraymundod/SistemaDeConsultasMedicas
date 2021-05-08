@@ -22,7 +22,7 @@ const routes: Routes = [
   {path: 'mantenimiento-solicitudes/:nit_login/informacion-expediente/:codigo_solicitud', component: InformacionExpedienteComponent},
   {path: 'mantenimiento-solicitudes/:nit_login/informacion-general/:codigo_solicitud', component: InformacionGeneralComponent},
   {path: 'mantenimiento-solicitudes/:nit_login/trazabilidad/:codigo_solicitud', component: TrazabilidadComponent},
-  {path: 'cambio-estado/:codigo_solicitud', component: CambioEstadoComponent},
+  {path: 'mantenimiento-solicitudes/:nit_login/cambio-estado/:codigo_solicitud', component: CambioEstadoComponent},
   {path: 'bandeja-centralizador/:nit', component: BandejaCentralizadorComponent},
   {path: 'bandeja-centralizador/:nit/cambio-estado/:codigo_solicitud/:nuevo_estado', component: SeguimientoSolicitudComponent},
   {path: 'login', component: LoginComponent}

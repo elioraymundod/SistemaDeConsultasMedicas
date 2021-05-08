@@ -61,6 +61,10 @@ export class SolicitudesService {
     return this.http.get(`${this.baseUrl}/obtener/usuarios/rnd`);
   }
 
+  public getEtiquetas(codigo_solicitud: any):Observable<any>{
+    return this.http.get(`${this.baseUrl}/etiquetas/${codigo_solicitud}`);
+  }
+
   public exportToExcel(json:any[], excelFileName: string): void{
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
     const workbook: XLSX.WorkBook = { Sheets: {'data': worksheet},

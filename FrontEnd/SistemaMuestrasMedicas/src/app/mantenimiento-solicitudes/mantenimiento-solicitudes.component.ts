@@ -341,10 +341,22 @@ export class MantenimientoSolicitudesComponent implements OnInit {
         break;  
         
       case '10':
-        this.router.navigate(['cambio-estado/', complementoRuta]);
+        this.solicitudesService.getEtiquetas(complementoRuta).subscribe(res => {
+          if (res.length === 0) {
+            Swal.fire({
+              title: 'Para cambiar de estado primero debe asociar una muestra a la solicitud.',
+              //text: `Codigo Solicitud: ` + ,
+              icon: 'warning',
+              confirmButtonText: 'Aceptar'
+            })
+          } else {
+            this.router.navigate([`mantenimiento-solicitudes/${this.nitLogin}/cambio-estado/`, complementoRuta]);
+          }
+        })
+        
         break;
       case '11':
-        this.router.navigate(['cambio-estado/', complementoRuta]);
+        this.router.navigate([`mantenimiento-solicitudes/${this.nitLogin}/cambio-estado/`, complementoRuta]);
         break;
     }
   }
