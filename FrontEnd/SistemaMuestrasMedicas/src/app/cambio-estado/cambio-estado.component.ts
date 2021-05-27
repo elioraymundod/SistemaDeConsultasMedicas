@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
@@ -20,6 +20,8 @@ export class CambioEstadoComponent implements OnInit {
   codigoEstado: any;
   nitLogin: any;
   usuarioCrea: any;
+  selectedFile: any;
+  usuarioAnterior: any;
 
   constructor(private _formBuilder: FormBuilder,
               private router: Router,
@@ -30,7 +32,10 @@ export class CambioEstadoComponent implements OnInit {
       codigoSolicitudFormControl: [''],
       descripcionFormControl: [''],
       estadoActualFormControl: [''],
-      nuevoEstadoFormControl: ['']
+      nuevoEstadoFormControl: [''],
+      observaciones: ['', [Validators.required]],
+      documento: ['', [Validators.required]]
+
     });
 
     this.date = new Date();
@@ -47,6 +52,7 @@ export class CambioEstadoComponent implements OnInit {
               res[i].fecha_creacion = String(moment(res[i].fecha_creacion.replace('+0000', '')).format('DD-MM-YYYY'))
             }
             console.log(res)
+            this.usuarioAnterior = res[0].usuario_asignacion;
             this.informacionFormGroup.get('codigoSolicitudFormControl')?.setValue(this.codigoSolicitud);
             this.informacionFormGroup.get('descripcionFormControl')?.setValue(res[0].descripcion);
             this.informacionFormGroup.get('estadoActualFormControl')?.setValue(res[0].estado)
@@ -62,8 +68,13 @@ export class CambioEstadoComponent implements OnInit {
                 this.informacionFormGroup.get('nuevoEstadoFormControl')?.setValue("Asignado");
                 break;
 
+              case 11:
+                this.informacionFormGroup.get('nuevoEstadoFormControl')?.setValue("Revision");
+              break;
 
-
+              case 12:
+                this.informacionFormGroup.get('nuevoEstadoFormControl')?.setValue("Autorizar");
+                break;
             }
           }
         })
@@ -79,9 +90,32 @@ export class CambioEstadoComponent implements OnInit {
       case 9:
       this.asignar();
       break;
+      case 12:
+      this.autorizar();
+      break;
 
     }
   }
+
+  fileSelected(event: any)
+  {
+    this.selectedFile = <File>event.target.files[0];
+    if(this.selectedFile.type !== "application/pdf") {
+      Swal.fire({
+        icon: 'error',
+        title: 'Debe subir un archivo PDF'
+      })
+      this.informacionFormGroup.get('documento')?.reset()
+    } 
+    if (this.selectedFile.size > 5000000) {
+      Swal.fire({
+        icon: 'error',
+        title: 'El tamaño máximo permitido es de 5 MB'
+      })
+      this.informacionFormGroup.get('documento')?.reset()
+    }
+    console.log(this.selectedFile)
+  };
 
   asignar() {
     this.solicitudesService.getCentralizador().subscribe(res => {
@@ -93,7 +127,8 @@ export class CambioEstadoComponent implements OnInit {
         codigo_estado: 10,
         fecha_modificacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
         usuario_modificacion: this.nitLogin,
-        ip_usuario_modificacion: '192.168.1.18'
+        ip_usuario_modificacion: '192.168.1.18',
+        usuario_anterior: this.usuarioAnterior
       }
       console.log(solicitud)
       this.solicitudesService.asignarSolicitud(solicitud).subscribe(res => {
@@ -106,6 +141,8 @@ export class CambioEstadoComponent implements OnInit {
         });
       });
 
+      const formData = new FormData();
+          formData.append('file', this.selectedFile);
       const historial = {
         codigo_historial: 0,
         codigo_solicitud: this.codigoSolicitud,
@@ -114,6 +151,8 @@ export class CambioEstadoComponent implements OnInit {
         fecha_creacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
         usuario_creacion: this.nitLogin,
         ip_usuario_creacion: '192.168.1.18',
+        adjunto: formData,
+        observaciones_cambio_estado: this.informacionFormGroup.get('observaciones')?.value,
         fecha_modificacion: null,
         usuario_modificacion: null,
         ip_usuario_modificacion: null
@@ -130,8 +169,50 @@ export class CambioEstadoComponent implements OnInit {
   enviar() {
     const solicitud = {
       codigo_solicitud: this.codigoSolicitud,
-      usuario_asignacion: null,
+      usuario_asignacion: this.nitLogin,
       codigo_estado: 9,
+      fecha_modificacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
+      usuario_modificacion: this.nitLogin,
+      ip_usuario_modificacion: '192.168.1.18',
+      usuario_anterior: null
+    }
+    this.solicitudesService.asignarSolicitud(solicitud).subscribe(res => {
+      Swal.fire({
+        titleText: `El cambio de estado a la solicitud se realizó con éxito.`,
+        icon: 'success',
+        showCloseButton: true,
+        showConfirmButton: false
+      });
+    });
+    const formData = new FormData();
+          formData.append('file', this.selectedFile);
+    const historial = {
+      codigo_historial: 0,
+      codigo_solicitud: this.codigoSolicitud,
+      usuario: this.nitLogin,
+      codigo_estado: 9,
+      fecha_creacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
+      usuario_creacion: this.nitLogin,
+      ip_usuario_creacion: '192.168.1.18',
+      adjunto: formData,
+      observaciones_cambio_estado: this.informacionFormGroup.get('observaciones')?.value,
+      fecha_modificacion: null,
+      usuario_modificacion: null,
+      ip_usuario_modificacion: null
+    }
+    this.solicitudesService.insertHistorial(historial).subscribe(res => {
+      console.log('se creo correctamente el historial, ', historial)
+    }, err => {
+      Swal.fire('No se pudo almacenar la solicitud', '', 'error')
+    });
+    this.regresarAMantenimientoSolicitudes();
+  }
+
+  autorizar() {
+    const solicitud = {
+      codigo_solicitud: this.codigoSolicitud,
+      usuario_asignacion: this.usuarioCrea,
+      codigo_estado: 15,
       fecha_modificacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
       usuario_modificacion: this.nitLogin,
       ip_usuario_modificacion: '192.168.1.18'
@@ -144,14 +225,18 @@ export class CambioEstadoComponent implements OnInit {
         showConfirmButton: false
       });
     });
+    const formData = new FormData();
+          formData.append('file', this.selectedFile);
     const historial = {
       codigo_historial: 0,
       codigo_solicitud: this.codigoSolicitud,
-      usuario: '100255426',
-      codigo_estado: 9,
+      usuario: this.nitLogin,
+      codigo_estado: 15,
       fecha_creacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
       usuario_creacion: this.nitLogin,
       ip_usuario_creacion: '192.168.1.18',
+      adjunto: formData,
+      observaciones_cambio_estado: this.informacionFormGroup.get('observaciones')?.value,
       fecha_modificacion: null,
       usuario_modificacion: null,
       ip_usuario_modificacion: null
@@ -167,7 +252,7 @@ export class CambioEstadoComponent implements OnInit {
 
 
   regresarAMantenimientoSolicitudes() {
-    this.router.navigate(['mantenimiento-solicitudes/', this.nitLogin]);
+    this.router.navigate(['bandeja-analista/', this.nitLogin]);
   }
 
 }

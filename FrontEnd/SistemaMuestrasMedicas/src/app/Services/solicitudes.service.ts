@@ -1,12 +1,14 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, NO_ERRORS_SCHEMA } from '@angular/core';
-import { Observable } from 'rxjs';
+import 'rxjs/add/operator/map';
+import { Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 const EXCEL_TYPE =
 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset = UTF-8';
 const EXCEL_EXT = '.xlsx';
+import { retry, catchError } from 'rxjs/operators';
 
 @Injectable()
 export class SolicitudesService {
@@ -53,6 +55,10 @@ export class SolicitudesService {
     return this.http.get(`${this.baseUrl}/solicitudes/centralizador/${usuarioAsignacion}`);
   }
 
+  public getSolicitudesByUsuarioCreacion(usuarioCreacion: any):Observable<any>{
+    return this.http.get(`${this.baseUrl}/solicitudes/usuario/creacion/${usuarioCreacion}`);
+  }
+
   public getHistorialEstados(codigoSolicitud: any):Observable<any>{
     return this.http.get(`${this.baseUrl}/historial/estados/${codigoSolicitud}`);
   }
@@ -61,8 +67,20 @@ export class SolicitudesService {
     return this.http.get(`${this.baseUrl}/obtener/usuarios/rnd`);
   }
 
+  public getAnalista():Observable<any>{
+    return this.http.get(`${this.baseUrl}/obtener/analistas/rnd`);
+  }
+
+  public getRevisor():Observable<any>{
+    return this.http.get(`${this.baseUrl}/obtener/revisor/rnd`);
+  }
+
   public getEtiquetas(codigo_solicitud: any):Observable<any>{
     return this.http.get(`${this.baseUrl}/etiquetas/${codigo_solicitud}`);
+  }
+
+  public getDatosUsuario(nit_usuario: any):Observable<any>{
+    return this.http.get(`${this.baseUrl}/datos/user/${nit_usuario}`);
   }
 
   public getSolicitudesByEstadoAndUsuario(estado: any, usuario: any):Observable<any>{

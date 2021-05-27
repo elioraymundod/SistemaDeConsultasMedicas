@@ -115,6 +115,25 @@ module.exports={
         })
     },   
 
+    getSolicitudeByUsuarioCreacion(usuario_creacion){
+        return new Promise((resolve,reject)=>{
+            con.query( 'SELECT  mm.*, '+
+            '(select ca.nombre from muestras_medicas_db.datos_catalogos as ca where ca.codigo_dato_catalogo = mm.codigo_tipo_solicitud) as tipo_solicitud,  '+
+            '(select us.nombre_usuario from muestras_medicas_db.usuarios as us where mm.usuario_asignacion = us.nit_usuario) as usuario,  '+
+            '(select caa.nombre from muestras_medicas_db.datos_catalogos as caa where mm.codigo_estado = caa.codigo_dato_catalogo) as estado,  '+
+            '(select csa.nombre from muestras_medicas_db.datos_catalogos as csa where mm.codigo_tipo_soporte = csa.codigo_dato_catalogo) as tipo_soporte,  '+
+            '(select sol.nombre from muestras_medicas_db.datos_catalogos as sol where mm.codigo_tipo_solicitante = sol.codigo_dato_catalogo) as tipo_solicitante,  '+
+            '(select so.nombre_cliente from muestras_medicas_db.clientes as so where mm.nit = so.nit_cliente) as solicitante,  '+
+            '(select ex.observaciones from muestras_medicas_db.expedientes as ex where mm.no_expediente = ex.no_expediente) as observaciones_expediente,  '+
+            '(select di.direccion_cliente from muestras_medicas_db.clientes as di where mm.nit = di.nit_cliente) as direccion_cliente, '+
+            '(select tel.telefonos from muestras_medicas_db.clientes as tel where mm.nit = tel.nit_cliente) as telefono_cliente ' + 
+            'FROM muestras_medicas_db.solicitudes_de_muestras as mm where mm.usuario_creacion = ? ', usuario_creacion, (err,rows)=> {
+                if(err) reject(err);
+                else resolve(rows);
+            })
+        })
+    },   
+
     getSolicitudesByCodigo(codigo_solicitud){
         return new Promise((resolve,reject)=>{
                 con.query( 'SELECT  mm.*, '+
@@ -176,6 +195,28 @@ module.exports={
         })
     }, 
 
+    getAnalista(){
+        return new Promise((resolve,reject)=>{
+            con.query('SELECT * FROM muestras_medicas_db.usuarios as us '+
+            'where us. codigo_rol = 28 '+
+            'order by rand() ',(err,rows)=>{
+                if(err) reject(err);
+                else resolve(rows);
+            })
+        })
+    }, 
+
+    getRevisor(){
+        return new Promise((resolve,reject)=>{
+            con.query('SELECT * FROM muestras_medicas_db.usuarios as us '+
+            'where us. codigo_rol = 29 '+
+            'order by rand() ',(err,rows)=>{
+                if(err) reject(err);
+                else resolve(rows);
+            })
+        })
+    }, 
+
     getEtiquetasMuestras(codigo_solicitud){
         return new Promise((resolve,reject)=>{
             con.query('SELECT * FROM muestras_medicas_db.etiqueta_de_muestra as us '+
@@ -207,6 +248,15 @@ module.exports={
         })
     }, 
 
+    getDatosUsuario(nit_usuario){
+        return new Promise((resolve,reject)=>{
+            con.query('select * from muestras_medicas_db.usuarios where nit_usuario = ?', nit_usuario,(err,rows)=>{
+                if(err) reject(err);
+                else resolve(rows);
+            })
+        })
+    }, 
+
     eliminarSolicitud(solicitud){
         return new Promise((resolve,reject)=>{
             let query='UPDATE muestras_medicas_db.solicitudes_de_muestras SET codigo_estado = ?, fecha_modificacion = ?, usuario_modificacion = ?, ip_usuario_modificacion = ? WHERE codigo_solicitud = ?';
@@ -225,13 +275,14 @@ module.exports={
 
     asignarSolicitud(solicitud){
         return new Promise((resolve,reject)=>{
-            let query='UPDATE muestras_medicas_db.solicitudes_de_muestras SET codigo_estado = ?, usuario_asignacion = ?, fecha_modificacion = ?, usuario_modificacion = ?, ip_usuario_modificacion = ? WHERE codigo_solicitud = ?';
+            let query='UPDATE muestras_medicas_db.solicitudes_de_muestras SET codigo_estado = ?, usuario_asignacion = ?, fecha_modificacion = ?, usuario_modificacion = ?, ip_usuario_modificacion = ?, usuario_anterior = ? WHERE codigo_solicitud = ?';
             console.log(solicitud)
             con.query(query,[solicitud.codigo_estado,
                 solicitud.usuario_asignacion,
                 solicitud.fecha_modificacion,
                 solicitud.usuario_modificacion,
                 solicitud.ip_usuario_modificacion,
+                solicitud.usuario_anterior,
                 solicitud.codigo_solicitud],(err,rows)=>{
                 if(err) reject(err);
                 else resolve (true);

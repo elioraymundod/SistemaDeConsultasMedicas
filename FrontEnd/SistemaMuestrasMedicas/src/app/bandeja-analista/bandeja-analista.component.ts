@@ -8,26 +8,26 @@ import Swal from 'sweetalert2';
 import { SolicitudesService } from '../Services/solicitudes.service';
 
 @Component({
-  selector: 'app-bandeja-centralizador',
-  templateUrl: './bandeja-centralizador.component.html',
-  styleUrls: ['./bandeja-centralizador.component.scss']
+  selector: 'app-bandeja-analista',
+  templateUrl: './bandeja-analista.component.html',
+  styleUrls: ['./bandeja-analista.component.scss']
 })
-export class BandejaCentralizadorComponent implements OnInit {
-
+export class BandejaAnalistaComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   displayedColumns = ['codigo_solicitud', 'no_expediente', 'nit', 'no_soporte', 'tipo_solicitud', 'usuario', 'estado', 'fecha_creacion', 'cantidad_de_muestras', 'dias_de_items', 'dias_vencimiento', 'accion'];
   dataSource = new MatTableDataSource();
   accionesFormGroup: FormGroup;
   nit: any;
-  
-  constructor(private _formBuilder: FormBuilder, private solicitudesService: SolicitudesService, private activatedRoute: ActivatedRoute, private router: Router) {
+
+  constructor(private _formBuilder: FormBuilder, private solicitudesService: SolicitudesService, private activatedRoute: ActivatedRoute, private router: Router) { 
     this.accionesFormGroup = this._formBuilder.group({
       opcionFormControl: ['']
     })
-   }
 
-  ngOnInit() {
+  }
+
+  ngOnInit(){
     this.activatedRoute.paramMap.subscribe(async res => {
       if(res.has('nit')) {
         this.nit = res.get('nit');
@@ -50,18 +50,29 @@ export class BandejaCentralizadorComponent implements OnInit {
     let complementoRuta = datos.codigo_solicitud
     let opcionSeleccionada = this.accionesFormGroup.get('opcionFormControl')?.value;
     switch(opcionSeleccionada) {
-      case '1': // Analisis
-        this.router.navigate([`bandeja-centralizador/${this.nit}/cambio-estado/${complementoRuta}/1`]);
+      case '4': // muestras
+        this.router.navigate([`bandeja-analista/${this.nit}/asociar/`, complementoRuta]);
         break;
-      case '2': // Rechazado
-        this.router.navigate([`bandeja-centralizador/${this.nit}/cambio-estado/${complementoRuta}/2`]);
+      case '10':
+        this.solicitudesService.getEtiquetas(complementoRuta).subscribe(res => {
+          if (res.length === 0) {
+            Swal.fire({
+              title: 'Para cambiar de estado primero debe asociar una muestra a la solicitud.',
+              icon: 'warning',
+              confirmButtonText: 'Aceptar'
+            })
+            this.accionesFormGroup.get('opcionFormControl')?.reset()
+          } else {
+            this.router.navigate([`bandeja-analista/${this.nit}/cambio-estado/`, complementoRuta]);
+          }
+        })
         break;
-      case '3': // Espera
-        this.router.navigate([`bandeja-centralizador/${this.nit}/cambio-estado/${complementoRuta}/3`]);
+      case '9':
+        this.router.navigate([`bandeja-analista/${this.nit}/cambio-estado/`, complementoRuta]);
         break;
-      case '4': // revision
-        this.router.navigate([`bandeja-centralizador/${this.nit}/cambio-estado/${complementoRuta}/4`]);
-      break;
+      case '15':
+        this.router.navigate([`bandeja-analista/${this.nit}/cambio-estado/`, complementoRuta]);
+        break;
     }
   }
 
@@ -83,4 +94,13 @@ export class BandejaCentralizadorComponent implements OnInit {
     })
   }
 
+  acciones: Opciones[] = [
+    {value: '4', viewValue: 'Asociar'}
+  ];
+
+}
+
+interface Opciones{
+  value : string;
+  viewValue: string;
 }

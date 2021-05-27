@@ -42,6 +42,12 @@ export class LoginComponent implements OnInit {
           case 27:
             this.router.navigate(['bandeja-centralizador/', nit]);
             break;
+          case 28:
+            this.router.navigate(['bandeja-analista/', nit]);
+            break;
+          case 29:
+            this.router.navigate(['bandeja-revisor/', nit])
+            break;
         }
       }
     })

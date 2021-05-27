@@ -24,6 +24,9 @@ import { CambioEstadoComponent } from './cambio-estado/cambio-estado.component';
 import { BandejaCentralizadorComponent } from './bandeja-centralizador/bandeja-centralizador.component';
 import { SeguimientoSolicitudComponent } from './seguimiento-solicitud/seguimiento-solicitud.component';
 import { LoginComponent } from './login/login.component';
+import { BandejaRevisorComponent } from './bandeja-revisor/bandeja-revisor.component';
+import { BandejaAnalistaComponent } from './bandeja-analista/bandeja-analista.component';
+import { AutorizarSolicitudComponent } from './mantenimiento-solicitudes/autorizar-solicitud/autorizar-solicitud.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +42,10 @@ import { LoginComponent } from './login/login.component';
     CambioEstadoComponent,
     BandejaCentralizadorComponent,
     SeguimientoSolicitudComponent,
-    LoginComponent
+    LoginComponent,
+    BandejaRevisorComponent,
+    BandejaAnalistaComponent,
+    AutorizarSolicitudComponent
   ],
   imports: [
     BrowserModule,

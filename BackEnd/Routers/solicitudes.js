@@ -61,6 +61,20 @@ router.get('/solicitudes/centralizador/:usuario_asignacion',(req,res)=>{
 
 });
 
+router.get('/solicitudes/usuario/creacion/:usuario_creacion',(req,res)=>{
+    solicitudes.getSolicitudeByUsuarioCreacion(req.params.usuario_creacion)
+                    .then(solicitudes=>{
+                        res.status(200).send(solicitudes);
+                    })
+                    .catch(err=>{
+                        console.error(err);
+                        res.status(500).send({
+                            mesage:'Error al obtener datos'
+                        });
+                    });
+
+});
+
 router.get('/historial/estados/:codigo_solicitud',(req,res)=>{
     solicitudes.getHistorialEstados(req.params.codigo_solicitud)
                     .then(solicitudes=>{
@@ -77,6 +91,20 @@ router.get('/historial/estados/:codigo_solicitud',(req,res)=>{
 
 router.get('/login/:user/:pass',(req,res)=>{
     solicitudes.getLogin(req.params.user, req.params.pass)
+                    .then(solicitudes=>{
+                        res.status(200).send(solicitudes);
+                    })
+                    .catch(err=>{
+                        console.error(err);
+                        res.status(500).send({
+                            mesage:'Error al obtener datos'
+                        });
+                    });
+
+});
+
+router.get('/datos/user/:nit_usuario',(req,res)=>{
+    solicitudes.getDatosUsuario(req.params.nit_usuario)
                     .then(solicitudes=>{
                         res.status(200).send(solicitudes);
                     })
@@ -173,6 +201,34 @@ router.get('/obtener/usuarios/rnd',(req,res)=>{
 
 });
 
+router.get('/obtener/analistas/rnd',(req,res)=>{
+    solicitudes.getAnalista()
+                    .then(solicitudes=>{
+                        res.status(200).send(solicitudes);
+                    })
+                    .catch(err=>{
+                        console.error(err);
+                        res.status(500).send({
+                            mesage:'Error al obtener datos'
+                        });
+                    });
+
+});
+
+router.get('/obtener/revisor/rnd',(req,res)=>{
+    solicitudes.getRevisor()
+                    .then(solicitudes=>{
+                        res.status(200).send(solicitudes);
+                    })
+                    .catch(err=>{
+                        console.error(err);
+                        res.status(500).send({
+                            mesage:'Error al obtener datos'
+                        });
+                    });
+
+});
+
 
 router.put('/solicitudes/eliminar',(req,res)=>{
     solicitudes.eliminarSolicitud(req.body)
@@ -190,7 +246,6 @@ router.put('/solicitudes/eliminar',(req,res)=>{
 });
 
 router.put('/asignar',(req,res)=>{
-    console.log('asignar1')
     solicitudes.asignarSolicitud(req.body)
                     .then(solicitudes=>{
                         res.status(200).send({

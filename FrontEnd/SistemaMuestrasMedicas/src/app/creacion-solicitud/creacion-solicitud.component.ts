@@ -31,6 +31,8 @@ export class CreacionSolicitudComponent implements OnInit {
   cantidadSolicitudes: any;
   numeroSolicitud: any;  
   nitLogin: any;
+  analista: string = '';
+  datosAnalista: any = []
 
   constructor(private _formBuilder: FormBuilder, 
               private catalogosService: CatalogosService,
@@ -47,7 +49,7 @@ export class CreacionSolicitudComponent implements OnInit {
       noExpedienteFormControl: ['', [Validators.required, Validators.minLength(21)]], 
       descripcionFormControl: ['', [Validators.required, Validators.minLength(10)]], 
       nitFormControl: ['', []],
-       nombreFormControl: ['', []]
+      nombreFormControl: ['', []]
     });
 
     this.soporteYContactoFormGroup = this._formBuilder.group({
@@ -62,10 +64,16 @@ export class CreacionSolicitudComponent implements OnInit {
    }
 
   async ngOnInit() {
-    this.activatedRoute.paramMap.subscribe(async res => {
+    await this.activatedRoute.paramMap.subscribe(async res => {
       if(res.has('nit_login')) {
         this.nitLogin = res.get('nit_login')
       }
+    })
+
+    // Obtener analista
+    await this.solicitudesService.getAnalista().subscribe(res => {
+      this.analista = res[0].nit_usuario
+      console.log('el analista es ', this.analista)
     })
 
     // Obtener tipo de solicitante
@@ -144,6 +152,11 @@ export class CreacionSolicitudComponent implements OnInit {
    * Metodo para guardar una solicitud
    */
   guardarSolicitud() {
+    // Obtener datos analista
+    this.solicitudesService.getDatosUsuario(this.analista).subscribe(res => {
+      this.datosAnalista = res;
+    })
+
     Swal.fire({
       title: '¿Desea crear la solicitud?',
       showDenyButton: true,
@@ -161,7 +174,7 @@ export class CreacionSolicitudComponent implements OnInit {
             no_expediente: this.crearSolicitudFormGroup.get('noExpedienteFormControl')?.value,
             codigo_tipo_soporte: this.soporteYContactoFormGroup.get('tipoSoporteFormControl')?.value,
             codigo_estado: 8,
-            usuario_asignacion: null,
+            usuario_asignacion: this.analista,
             no_soporte: this.soporteYContactoFormGroup.get('numeroSoporteFormControl')?.value,
             nit: this.crearSolicitudFormGroup.get('nitFormControl')?.value,
             cantidad_de_muestras: 0,
@@ -177,8 +190,16 @@ export class CreacionSolicitudComponent implements OnInit {
             usuario_modificacion: '',
             ip_usuario_modificacion: ''
           }
+
           this.solicitudesService.insertSolicitud(solicitud).subscribe(res => {
-              Swal.fire(`Solicitud creada con exito, el numero de su solicitud es ${this.numeroSolicitud}`, '', 'success')
+              Swal.fire({
+                html: `Solicitud creada con exito, el numero de su solicitud es <b>${this.numeroSolicitud}</b><br> ` +
+                'La solicitud se asignó al analista <b>' + this.datosAnalista[0].nombre_usuario + '</b>',
+                icon: 'success'
+
+              })
+
+              console.log('datos analista ', this.datosAnalista)
               this.regresarAMantenimientoSolicitudes();
             }, err => {
               Swal.fire('No se pudo almacenar la solicitud', '', 'error')
@@ -187,10 +208,10 @@ export class CreacionSolicitudComponent implements OnInit {
           const historial = {
             codigo_historial: 0,
             codigo_solicitud: this.numeroSolicitud,
-            usuario: '100255426',
+            usuario: this.nitLogin,
             codigo_estado: 8,
             fecha_creacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
-            usuario_creacion: 'master',
+            usuario_creacion: this.nitLogin,
             ip_usuario_creacion: '192.168.1.18',
             fecha_modificacion: null,
             usuario_modificacion: null,

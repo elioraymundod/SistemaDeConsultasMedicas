@@ -1,30 +1,30 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as moment from 'moment';
 import Swal from 'sweetalert2';
 import { SolicitudesService } from '../Services/solicitudes.service';
+import * as moment from 'moment';
 
 @Component({
-  selector: 'app-bandeja-centralizador',
-  templateUrl: './bandeja-centralizador.component.html',
-  styleUrls: ['./bandeja-centralizador.component.scss']
+  selector: 'app-bandeja-revisor',
+  templateUrl: './bandeja-revisor.component.html',
+  styleUrls: ['./bandeja-revisor.component.scss']
 })
-export class BandejaCentralizadorComponent implements OnInit {
-
+export class BandejaRevisorComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
-  displayedColumns = ['codigo_solicitud', 'no_expediente', 'nit', 'no_soporte', 'tipo_solicitud', 'usuario', 'estado', 'fecha_creacion', 'cantidad_de_muestras', 'dias_de_items', 'dias_vencimiento', 'accion'];
+  displayedColumns = ['codigo_solicitud', 'no_expediente', 'nit', 'no_soporte', 'tipo_solicitud', 'usuario', 'estado', 'fecha_creacion', 'cantidad_de_muestras', 'dias_de_items', 'documentos', 'dias_vencimiento', 'accion'];
   dataSource = new MatTableDataSource();
   accionesFormGroup: FormGroup;
   nit: any;
-  
+
   constructor(private _formBuilder: FormBuilder, private solicitudesService: SolicitudesService, private activatedRoute: ActivatedRoute, private router: Router) {
     this.accionesFormGroup = this._formBuilder.group({
       opcionFormControl: ['']
     })
+
    }
 
   ngOnInit() {
@@ -39,6 +39,7 @@ export class BandejaCentralizadorComponent implements OnInit {
             this.dataSource.data = res;
             console.log(res)
           } else {
+            Swal.fire('Aun no tiene solicitudes asignadas.', '', 'error')
           }
         })  
       }
@@ -84,3 +85,4 @@ export class BandejaCentralizadorComponent implements OnInit {
   }
 
 }
+

@@ -35,6 +35,7 @@ export class MantenimientoSolicitudesComponent implements OnInit {
   soliclitudesRechazadas = new MatTableDataSource();
   dataSourceExcel = new MatTableDataSource();
   nitLogin: any;
+  analista: string = '';
 
 
   constructor(private catalogosService: CatalogosService,
@@ -62,12 +63,27 @@ export class MantenimientoSolicitudesComponent implements OnInit {
 
     this.mostrarTabla = false;
     this.date = new Date();
+    
   }
 
   ngOnInit(){
     this.activatedRoute.paramMap.subscribe(async res => {
       if(res.has('nit_login')) {
         this.nitLogin = res.get('nit_login')
+      }
+    })
+
+    this.solicitudesService.getSolicitudesByUsuarioCreacion(this.nitLogin).subscribe(res => {
+      if(res.length !== 0) {
+        for(let i = 0; i< res.length; i++) {
+          res[i].fecha_creacion = String(moment(res[i].fecha_creacion.replace('+0000', '')).format('DD-MM-YYYY'))
+        }
+        this.dataSource.data = res;
+        this.dataSourceExcel.data = res;
+        this.mostrarTabla = true;
+      } else {
+        this.mostrarTabla = false;
+        // Swal.fire('No se encontraron resultados con los datos ingresados, por favor verificar los datos.', '', 'error')
       }
     })
 
@@ -271,6 +287,7 @@ export class MantenimientoSolicitudesComponent implements OnInit {
     switch(opcionSeleccionada) {
       case '1': // Exportar a excel
         this.solicitudesService.exportToExcel(this.dataSourceExcel.data, 'resultado_consulta');
+        this.accionesFormGroup.get('opcionFormControl')?.reset()
         break;
       case '2': // Informacion general
         this.router.navigate([`mantenimiento-solicitudes/${this.nitLogin}/informacion-general/`, complementoRuta]);
@@ -365,6 +382,9 @@ export class MantenimientoSolicitudesComponent implements OnInit {
       case '11':
         this.router.navigate([`mantenimiento-solicitudes/${this.nitLogin}/cambio-estado/`, complementoRuta]);
         break;
+      case '12':
+        this.router.navigate([`mantenimiento-solicitudes/${this.nitLogin}/autorizar/`, complementoRuta]);
+        break;
     }
   }
 
@@ -372,11 +392,11 @@ export class MantenimientoSolicitudesComponent implements OnInit {
     {value: '1', viewValue: 'Exportar a Excel'},
     {value: '2', viewValue: 'Información General'},
     {value: '3', viewValue: 'Información Expediente'},
-    {value: '4', viewValue: 'Asociar'},
+    //{value: '4', viewValue: 'Asociar'},
     {value: '5', viewValue: 'Trazabilidad'},
-    {value: '6', viewValue: 'Etiqueta de muestra'},
+    // {value: '6', viewValue: 'Etiqueta de muestra'},
     {value: '7', viewValue: 'Eliminar solicitud'},
-    {value: '8', viewValue: 'Estados de la solicitud'},
+    //{value: '8', viewValue: 'Estados de la solicitud'},
     {value: '9', viewValue: 'Información Cliente'}
   ];
 

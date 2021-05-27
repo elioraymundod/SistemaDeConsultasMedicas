@@ -131,10 +131,9 @@
                         <div *ngIf="tipoMuestra === 'Cultivo'">
                             <div class="col- text-center">
                                 <mat-form-field >
-                                    <mat-label>Microbiótico</mat-label>
-                                    <input matInput placeholder=""  formControlName="microbioticoFormControl" autocomplete="off">
+                                    <input matInput placeholder=""   autocomplete="off" value="Microbiotico" readonly>
                                 </mat-form-field>
-                                <mat-slide-toggle>Seleccionar item</mat-slide-toggle>
+                                <mat-slide-toggle formControlName="microbioticoFormControl" (change)="validarSlideToggles()" >Seleccionar item</mat-slide-toggle>
                             </div>
                         </div>
                         <div *ngIf="tipoMuestra === 'Plaquetas'">

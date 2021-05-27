@@ -1,6 +1,5 @@
 <div class="card-body">
-    <mat-card-title class="titulo">Bandeja centralizador</mat-card-title>
-
+    <mat-card-title class="titulo">Bandeja analista</mat-card-title>
     <button mat-raised-button class="botones margenBotones" type="button" (click)="cerrarSesion()">Cerrar Sesion  <span class="material-icons">arrow_back</span></button>
 
     <div class="mat-elevation-z8 mt-2">
@@ -84,18 +83,33 @@
                     <td mat-cell *matCellDef="let dato"> 
                         <mat-form-field appearance="fill" >
                             <mat-label>Seleccione una opcion</mat-label>
-                            <mat-select (ngModelChange)="ejecutarAccion(dato)" formControlName="opcionFormControl"> 
-                            <mat-option *ngIf="dato.codigo_estado === 10" [value]="'1'">
+                            <mat-select (ngModelChange)="ejecutarAccion(dato)" formControlName="opcionFormControl">
+                            <!--mat-option *ngFor="let opcion of acciones" [value]="opcion.value">
+                                {{opcion.viewValue}}
+                            </mat-option--> 
+                            <mat-option *ngIf="dato.codigo_estado !== 12" [value]="'4'">
+                                Asociar
+                            </mat-option>  
+                            <mat-option *ngIf="dato.codigo_estado === 8" [value]="'10'">
+                                Enviado
+                            </mat-option>  
+                            <mat-option *ngIf="dato.codigo_estado === 9" [value]="'9'">
+                                Asignado
+                            </mat-option>
+                            <mat-option *ngIf="dato.codigo_estado === 10" [value]="'11'">
                                 Analisis
                             </mat-option>
-                            <mat-option *ngIf="dato.codigo_estado === 10" [value]="'2'">
+                            <mat-option *ngIf="dato.codigo_estado === 10" [value]="'12'">
                                 Rechazado
                             </mat-option>
-                            <mat-option *ngIf="dato.codigo_estado === 10" [value]="'3'">
+                            <mat-option *ngIf="dato.codigo_estado === 10" [value]="'13'">
                                 Espera
                             </mat-option>
-                            <mat-option *ngIf="dato.codigo_estado === 11" [value]="'4'">
+                            <mat-option *ngIf="dato.codigo_estado === 11" [value]="'14'">
                                 Revision
+                            </mat-option>
+                            <mat-option *ngIf="dato.codigo_estado === 12" [value]="'15'">
+                                Autorizar
                             </mat-option>
                             </mat-select>
                         </mat-form-field>

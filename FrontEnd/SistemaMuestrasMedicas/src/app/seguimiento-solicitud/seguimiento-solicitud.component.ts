@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
@@ -20,6 +20,9 @@ export class SeguimientoSolicitudComponent implements OnInit {
   auxEstado: any;
   nit: any;
   usuarioCrea: any;
+  selectedFile: any;
+  nitAnalista: any;
+  nombreAnalista: any;
 
   constructor(private _formBuilder: FormBuilder,
     private router: Router,
@@ -31,7 +34,9 @@ export class SeguimientoSolicitudComponent implements OnInit {
         codigoSolicitudFormControl: [''],
         descripcionFormControl: [''],
         estadoActualFormControl: [''],
-        nuevoEstadoFormControl: ['']
+        nuevoEstadoFormControl: [''],
+        observaciones: ['', [Validators.required]],
+        documento: ['', [Validators.required]]
       });
 
       this.date = new Date();
@@ -49,7 +54,9 @@ export class SeguimientoSolicitudComponent implements OnInit {
             for(let i = 0; i< res.length; i++) {
               res[i].fecha_creacion = String(moment(res[i].fecha_creacion.replace('+0000', '')).format('DD-MM-YYYY'))
             }
-            console.log(res)
+            console.log('datos del indfasd', res)
+            this.nitAnalista = res[0].usuario_anterior;
+            console.log('analista es ', this.nitAnalista)
             this.informacionFormGroup.get('codigoSolicitudFormControl')?.setValue(this.codigoSolicitud);
             this.informacionFormGroup.get('descripcionFormControl')?.setValue(res[0].descripcion);
             this.informacionFormGroup.get('estadoActualFormControl')?.setValue(res[0].estado)
@@ -68,12 +75,37 @@ export class SeguimientoSolicitudComponent implements OnInit {
                 this.informacionFormGroup.get('nuevoEstadoFormControl')?.setValue("Espera");
                 break;
 
+                case '4':
+                  this.informacionFormGroup.get('nuevoEstadoFormControl')?.setValue("Revision");
+                  break;
+  
+
             }
           }
         })
       }
     })
   }
+
+  fileSelected(event: any)
+  {
+    this.selectedFile = <File>event.target.files[0];
+    if(this.selectedFile.type !== "application/pdf") {
+      Swal.fire({
+        icon: 'error',
+        title: 'Debe subir un archivo PDF'
+      })
+      this.informacionFormGroup.get('documento')?.reset()
+    } 
+    if (this.selectedFile.size > 5000000) {
+      Swal.fire({
+        icon: 'error',
+        title: 'El tamaño máximo permitido es de 5 MB'
+      })
+      this.informacionFormGroup.get('documento')?.reset()
+    }
+    console.log(this.selectedFile)
+  };
 
   cambiarEstado() {
     switch(this.auxEstado) {
@@ -90,7 +122,7 @@ export class SeguimientoSolicitudComponent implements OnInit {
         break;
 
       case '4':
-
+        this.revisar();
         break;
 
     }
@@ -110,7 +142,8 @@ export class SeguimientoSolicitudComponent implements OnInit {
       usuario_asignacion: this.nit,
       codigo_estado: codigo_estado,
       fecha_modificacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
-      usuario_modificacion: 'master',
+      usuario_modificacion: this.nit,
+      usuario_anterior: this.nitAnalista,
       ip_usuario_modificacion: '192.168.1.18'
     }
     this.solicitudesService.asignarSolicitud(solicitud).subscribe(res => {
@@ -121,14 +154,19 @@ export class SeguimientoSolicitudComponent implements OnInit {
         showConfirmButton: false
       });
     });
+
+    const formData = new FormData();
+          formData.append('file', this.selectedFile);
     const historial = {
       codigo_historial: 0,
       codigo_solicitud: this.codigoSolicitud,
       usuario: this.nit,
       codigo_estado: codigo_estado,
       fecha_creacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
-      usuario_creacion: 'master',
+      usuario_creacion: this.nit,
       ip_usuario_creacion: '192.168.1.18',
+      adjunto: formData,
+      observaciones_cambio_estado: this.informacionFormGroup.get('observaciones')?.value,
       fecha_modificacion: null,
       usuario_modificacion: null,
       ip_usuario_modificacion: null
@@ -157,6 +195,53 @@ export class SeguimientoSolicitudComponent implements OnInit {
         showCloseButton: true,
         showConfirmButton: false
       });
+    });
+    this.regresarBandejaCentralizador();
+  }
+
+  revisar() {
+    const solicitud = {
+      codigo_solicitud: this.codigoSolicitud,
+      usuario_asignacion: this.nitAnalista,
+      codigo_estado: 12,
+      fecha_modificacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
+      usuario_modificacion: this.nit,
+      ip_usuario_modificacion: '192.168.1.18'
+    }
+    this.solicitudesService.getDatosUsuario(this.nitAnalista).subscribe(res => {
+      this.nombreAnalista = res[0].nombre_usuario
+    })
+
+    this.solicitudesService.asignarSolicitud(solicitud).subscribe(res => {
+      Swal.fire({
+        titleText: `El cambio de estado a la solicitud se realizó con éxito.`,
+        html: `La solicitud regresó a la bandeja del analista: <b>${this.nombreAnalista} </b>`,
+        icon: 'success',
+        showCloseButton: true,
+        showConfirmButton: false
+      });
+    });
+
+    const formData = new FormData();
+          formData.append('file', this.selectedFile);
+    const historial = {
+      codigo_historial: 0,
+      codigo_solicitud: this.codigoSolicitud,
+      usuario: this.nit,
+      codigo_estado: 12,
+      fecha_creacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
+      usuario_creacion: this.nit,
+      ip_usuario_creacion: '192.168.1.18',
+      adjunto: formData,
+      observaciones_cambio_estado: this.informacionFormGroup.get('observaciones')?.value,
+      fecha_modificacion: null,
+      usuario_modificacion: null,
+      ip_usuario_modificacion: null
+    }
+    this.solicitudesService.insertHistorial(historial).subscribe(res => {
+      console.log('se creo correctamente el historial, ', historial)
+    }, err => {
+      Swal.fire('No se pudo almacenar la solicitud', '', 'error')
     });
     this.regresarBandejaCentralizador();
   }

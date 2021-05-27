@@ -150,7 +150,7 @@ expediente: any;
   ];
 
   regresarAMantenimientoSolicitudes() {
-    this.router.navigate(['mantenimiento-solicitudes/', this.nitLogin]);
+    this.router.navigate(['bandeja-analista/', this.nitLogin]);
   }
 
   async inicializarToggles() {

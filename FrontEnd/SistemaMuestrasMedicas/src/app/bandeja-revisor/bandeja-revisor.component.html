@@ -1,5 +1,5 @@
 <div class="card-body">
-    <mat-card-title class="titulo">Bandeja centralizador</mat-card-title>
+    <mat-card-title class="titulo">Bandeja revisor</mat-card-title>
 
     <button mat-raised-button class="botones margenBotones" type="button" (click)="cerrarSesion()">Cerrar Sesion  <span class="material-icons">arrow_back</span></button>
 
@@ -66,10 +66,10 @@
             </ng-container>
 
             <!-- Columna Cantidad documentos-->
-            <!--ng-container matColumnDef="documentos">
+            <ng-container matColumnDef="documentos">
                 <th mat-header-cell *matHeaderCellDef class="header-table">Cantidad de documentos</th>
                 <td mat-cell *matCellDef="let dato"> {{dato.dias_de_items}} </td>
-            </ng-container-->
+            </ng-container>
 
             <!-- Columna dias vencimiento-->
             <ng-container matColumnDef="dias_vencimiento">
