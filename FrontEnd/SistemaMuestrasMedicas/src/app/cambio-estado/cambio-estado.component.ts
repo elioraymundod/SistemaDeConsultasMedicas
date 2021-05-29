@@ -22,6 +22,7 @@ export class CambioEstadoComponent implements OnInit {
   usuarioCrea: any;
   selectedFile: any;
   usuarioAnterior: any;
+  ultimoCentralizador: any;
 
   constructor(private _formBuilder: FormBuilder,
               private router: Router,
@@ -58,6 +59,7 @@ export class CambioEstadoComponent implements OnInit {
             this.informacionFormGroup.get('estadoActualFormControl')?.setValue(res[0].estado)
             this.codigoEstado = res[0].codigo_estado;
             this.usuarioCrea = res[0].usuario_creacion;
+            this.ultimoCentralizador = res[0].revisor_anterior;
             switch(res[0].codigo_estado) {
               
               case 8:
@@ -75,6 +77,10 @@ export class CambioEstadoComponent implements OnInit {
               case 12:
                 this.informacionFormGroup.get('nuevoEstadoFormControl')?.setValue("Autorizar");
                 break;
+
+              case 14:
+                this.informacionFormGroup.get('nuevoEstadoFormControl')?.setValue("Reasignar");
+              break;
             }
           }
         })
@@ -93,7 +99,9 @@ export class CambioEstadoComponent implements OnInit {
       case 12:
       this.autorizar();
       break;
-
+      case 14:
+      this.reasignar();
+      break;
     }
   }
 
@@ -116,6 +124,56 @@ export class CambioEstadoComponent implements OnInit {
     }
     console.log(this.selectedFile)
   };
+
+  reasignar() {
+
+    this.solicitudesService.getDatosUsuario(this.ultimoCentralizador).subscribe(res=>{
+      this.nombreCentralizador = res[0].nombre_usuario;
+    })
+    const solicitud = {
+      codigo_solicitud: this.codigoSolicitud,
+      usuario_asignacion: this.ultimoCentralizador,
+      codigo_estado: 10,
+      fecha_modificacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
+      usuario_modificacion: this.nitLogin,
+      ip_usuario_modificacion: '192.168.1.18',
+      usuario_anterior: this.usuarioAnterior
+    }
+
+    this.solicitudesService.asignarSolicitud(solicitud).subscribe(res => {
+      Swal.fire({
+        titleText: `El cambio de estado a la solicitud se realizó con éxito. Se ha asignado la solicitud al centralizador con los siguientes datos:`,
+        html: `<b>NIT: </b> ${this.ultimoCentralizador} <br> <b>Nombre: </b> ${this.nombreCentralizador}`,
+        icon: 'success',
+        showCloseButton: true,
+        showConfirmButton: false
+      });
+    });
+
+    const formData = new FormData();
+        formData.append('file', this.selectedFile);
+    const historial = {
+      codigo_historial: 0,
+      codigo_solicitud: this.codigoSolicitud,
+      usuario: this.nitLogin,
+      codigo_estado: 10,
+      fecha_creacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
+      usuario_creacion: this.nitLogin,
+      ip_usuario_creacion: '192.168.1.18',
+      adjunto: formData,
+      observaciones_cambio_estado: this.informacionFormGroup.get('observaciones')?.value,
+      fecha_modificacion: null,
+      usuario_modificacion: null,
+      ip_usuario_modificacion: null
+    }
+    this.solicitudesService.insertHistorial(historial).subscribe(res => {
+      console.log('se creo correctamente el historial, ', historial)
+    }, err => {
+      Swal.fire('No se pudo almacenar la solicitud', '', 'error')
+    });
+
+    this.regresarAMantenimientoSolicitudes();
+  }
 
   asignar() {
     this.solicitudesService.getCentralizador().subscribe(res => {
@@ -162,6 +220,19 @@ export class CambioEstadoComponent implements OnInit {
       }, err => {
         Swal.fire('No se pudo almacenar la solicitud', '', 'error')
       });
+
+      const usuario = {
+        fecha_modificacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
+        usuario_modificacion: this.nitLogin,
+        ip_usuario_modificacion: '192.168.1.18',
+        nit_usuario: this.nitCentralizador
+      }
+
+      this.solicitudesService.actualizarUsuario(usuario).subscribe(res => {
+        console.log('se creo correctamente la actualizacion de usuario')
+      }, err => {
+        console.log('no se pudo actualizar el usuario.')
+      })
       this.regresarAMantenimientoSolicitudes();
     })
   }

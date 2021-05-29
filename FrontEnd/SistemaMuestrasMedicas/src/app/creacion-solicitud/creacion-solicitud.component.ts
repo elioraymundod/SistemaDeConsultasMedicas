@@ -191,7 +191,7 @@ export class CreacionSolicitudComponent implements OnInit {
             ip_usuario_modificacion: ''
           }
 
-          this.solicitudesService.insertSolicitud(solicitud).subscribe(res => {
+         this.solicitudesService.insertSolicitud(solicitud).subscribe(res => {
               Swal.fire({
                 html: `Solicitud creada con exito, el numero de su solicitud es <b>${this.numeroSolicitud}</b><br> ` +
                 'La solicitud se asignó al analista <b>' + this.datosAnalista[0].nombre_usuario + '</b>',
@@ -217,12 +217,25 @@ export class CreacionSolicitudComponent implements OnInit {
             usuario_modificacion: null,
             ip_usuario_modificacion: null
           }
-          this.solicitudesService.insertHistorial(historial).subscribe(res => {
+         this.solicitudesService.insertHistorial(historial).subscribe(res => {
             console.log('se creo correctamente el historial, ', historial)
           }, err => {
             Swal.fire('No se pudo almacenar la solicitud', '', 'error')
           });
-          console.log(solicitud)   
+          console.log('la soliciutd a enviar es ', solicitud)   
+
+          const usuario = {
+            fecha_modificacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
+            usuario_modificacion: this.nitLogin,
+            ip_usuario_modificacion: '192.168.1.18',
+            nit_usuario: this.analista
+          }
+
+          this.solicitudesService.actualizarUsuario(usuario).subscribe(res => {
+            console.log('se creo correctamente la actualizacion de usuario')
+          }, err => {
+            console.log('no se pudo actualizar el usuario.')
+          })
       } else if (result.isDenied) {
         // Swal.fire('Changes are not saved', '', 'info')
       } else {

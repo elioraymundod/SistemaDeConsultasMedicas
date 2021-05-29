@@ -426,4 +426,8 @@ export class MantenimientoSolicitudesComponent implements OnInit {
     this.router.navigate([`mantenimiento-solicitudes/${this.nitLogin}/creacionSolicitud`]);
   }
 
+  fueRechazado(solicitud: any): boolean {
+    return solicitud.codigo_estado == 14;
+  }
+
 }

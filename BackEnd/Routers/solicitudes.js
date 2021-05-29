@@ -75,6 +75,20 @@ router.get('/solicitudes/usuario/creacion/:usuario_creacion',(req,res)=>{
 
 });
 
+router.get('/comentarios/solicitud/estado/:codigo_solicitud/:codigo_estado',(req,res)=>{
+    solicitudes.getComentariosByCodigoAndFase(req.params.codigo_solicitud, req.params.codigo_estado)
+                    .then(solicitudes=>{
+                        res.status(200).send(solicitudes);
+                    })
+                    .catch(err=>{
+                        console.error(err);
+                        res.status(500).send({
+                            mesage:'Error al obtener datos'
+                        });
+                    });
+
+});
+
 router.get('/historial/estados/:codigo_solicitud',(req,res)=>{
     solicitudes.getHistorialEstados(req.params.codigo_solicitud)
                     .then(solicitudes=>{
@@ -247,6 +261,21 @@ router.put('/solicitudes/eliminar',(req,res)=>{
 
 router.put('/asignar',(req,res)=>{
     solicitudes.asignarSolicitud(req.body)
+                    .then(solicitudes=>{
+                        res.status(200).send({
+                            mesage:'Se actualizaron los datos correctamente'
+                        });
+                    })
+                    .catch(err=>{
+                        console.error(err);
+                        res.status(500).send({
+                            mesage:'Error al actualizar datos'
+                        });
+                    });
+});
+
+router.put('/usuarios',(req,res)=>{
+    solicitudes.actualizarUsuario(req.body)
                     .then(solicitudes=>{
                         res.status(200).send({
                             mesage:'Se actualizaron los datos correctamente'

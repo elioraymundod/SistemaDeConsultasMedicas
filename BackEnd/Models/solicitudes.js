@@ -108,7 +108,7 @@ module.exports={
             '(select ex.observaciones from muestras_medicas_db.expedientes as ex where mm.no_expediente = ex.no_expediente) as observaciones_expediente,  '+
             '(select di.direccion_cliente from muestras_medicas_db.clientes as di where mm.nit = di.nit_cliente) as direccion_cliente, '+
             '(select tel.telefonos from muestras_medicas_db.clientes as tel where mm.nit = tel.nit_cliente) as telefono_cliente ' + 
-            'FROM muestras_medicas_db.solicitudes_de_muestras as mm where mm.usuario_asignacion = ? ', usuario_asignacion, (err,rows)=> {
+            'FROM muestras_medicas_db.solicitudes_de_muestras as mm where mm.usuario_asignacion = ? and mm.codigo_estado <> 17 ', usuario_asignacion, (err,rows)=> {
                 if(err) reject(err);
                 else resolve(rows);
             })
@@ -127,7 +127,7 @@ module.exports={
             '(select ex.observaciones from muestras_medicas_db.expedientes as ex where mm.no_expediente = ex.no_expediente) as observaciones_expediente,  '+
             '(select di.direccion_cliente from muestras_medicas_db.clientes as di where mm.nit = di.nit_cliente) as direccion_cliente, '+
             '(select tel.telefonos from muestras_medicas_db.clientes as tel where mm.nit = tel.nit_cliente) as telefono_cliente ' + 
-            'FROM muestras_medicas_db.solicitudes_de_muestras as mm where mm.usuario_creacion = ? ', usuario_creacion, (err,rows)=> {
+            'FROM muestras_medicas_db.solicitudes_de_muestras as mm where mm.usuario_creacion = ? and mm.codigo_estado <> 17', usuario_creacion, (err,rows)=> {
                 if(err) reject(err);
                 else resolve(rows);
             })
@@ -187,8 +187,8 @@ module.exports={
     getCentralizador(){
         return new Promise((resolve,reject)=>{
             con.query('SELECT * FROM muestras_medicas_db.usuarios as us '+
-            'where us. codigo_rol = 27 '+
-            'order by rand() ',(err,rows)=>{
+            'where us.codigo_rol = 27 '+
+            'order by us.fecha_modificacion asc',(err,rows)=>{
                 if(err) reject(err);
                 else resolve(rows);
             })
@@ -198,8 +198,8 @@ module.exports={
     getAnalista(){
         return new Promise((resolve,reject)=>{
             con.query('SELECT * FROM muestras_medicas_db.usuarios as us '+
-            'where us. codigo_rol = 28 '+
-            'order by rand() ',(err,rows)=>{
+            'where us. codigo_rol = 28 ' +
+            'order by us.fecha_modificacion asc',(err,rows)=>{
                 if(err) reject(err);
                 else resolve(rows);
             })
@@ -275,7 +275,7 @@ module.exports={
 
     asignarSolicitud(solicitud){
         return new Promise((resolve,reject)=>{
-            let query='UPDATE muestras_medicas_db.solicitudes_de_muestras SET codigo_estado = ?, usuario_asignacion = ?, fecha_modificacion = ?, usuario_modificacion = ?, ip_usuario_modificacion = ?, usuario_anterior = ? WHERE codigo_solicitud = ?';
+            let query='UPDATE muestras_medicas_db.solicitudes_de_muestras SET codigo_estado = ?, usuario_asignacion = ?, fecha_modificacion = ?, usuario_modificacion = ?, ip_usuario_modificacion = ?, usuario_anterior = ?, revisor_anterior = ? WHERE codigo_solicitud = ?';
             console.log(solicitud)
             con.query(query,[solicitud.codigo_estado,
                 solicitud.usuario_asignacion,
@@ -283,6 +283,7 @@ module.exports={
                 solicitud.usuario_modificacion,
                 solicitud.ip_usuario_modificacion,
                 solicitud.usuario_anterior,
+                solicitud.revisor_anterior,
                 solicitud.codigo_solicitud],(err,rows)=>{
                 if(err) reject(err);
                 else resolve (true);
@@ -290,6 +291,30 @@ module.exports={
             });
         });
     },
+
+    actualizarUsuario(usuario){
+        return new Promise((resolve,reject)=>{
+            let query='UPDATE muestras_medicas_db.usuarios SET fecha_modificacion = ?, usuario_modificacion = ?, ip_usuario_modificacion = ? WHERE nit_usuario = ?';
+            console.log(usuario)
+            con.query(query,[usuario.fecha_modificacion,
+                usuario.usuario_modificacion,
+                usuario.ip_usuario_modificacion,
+                usuario.nit_usuario],(err,rows)=>{
+                if(err) reject(err);
+                else resolve (true);
+
+            });
+        });
+    },
+
+    getComentariosByCodigoAndFase(codigo_solicitud, codigo_estado) {
+        return new Promise((resolve,reject)=>{
+            con.query('select * from muestras_medicas_db.historial_estados where codigo_solicitud = ? and codigo_estado = ? order by fecha_creacion desc', [codigo_solicitud, codigo_estado],(err,rows)=>{
+                if(err) reject(err);
+                else resolve(rows);
+            })
+        })
+    }
 
    
 }

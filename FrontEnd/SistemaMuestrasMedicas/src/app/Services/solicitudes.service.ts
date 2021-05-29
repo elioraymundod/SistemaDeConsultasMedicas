@@ -35,6 +35,11 @@ export class SolicitudesService {
     return this.http.put(`${this.baseUrl}/asignar`, solicitud)
   }
 
+  public actualizarUsuario(usuario: any):Observable<any>{
+    console.log('datos a enviar ' ,usuario)
+    return this.http.put(`${this.baseUrl}/usuarios`, usuario)
+  }
+
   public getSolicitudes(codigoSolicitud: any, no_expediente: any, no_soporte: any, usuario_asignacion: any, nit: any, codigo_tipo_solicitud: any, codigo_estado: any, fecha_inicio: any, fecha_fin: any):Observable<any>{
     return this.http.get(`${this.baseUrl}/solicitudes/${codigoSolicitud}/${no_expediente}/${no_soporte}/${usuario_asignacion}/${nit}/${codigo_tipo_solicitud}/${codigo_estado}/${fecha_inicio}/${fecha_fin}`);
   }
@@ -61,6 +66,10 @@ export class SolicitudesService {
 
   public getHistorialEstados(codigoSolicitud: any):Observable<any>{
     return this.http.get(`${this.baseUrl}/historial/estados/${codigoSolicitud}`);
+  }
+
+  public getComentarioByCodigoAndEstado(codigoSolicitud: any, codigoEstado: any):Observable<any>{
+    return this.http.get(`${this.baseUrl}/comentarios/solicitud/estado/${codigoSolicitud}/${codigoEstado}`);
   }
 
   public getCentralizador():Observable<any>{

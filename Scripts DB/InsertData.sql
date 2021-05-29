@@ -63,10 +63,10 @@ INSERT INTO `expedientes` VALUES('4859-77-95-59-1595498', '49548984954', 'Expedi
 INSERT INTO `expedientes` VALUES('7895-45-89-45-4958548', '19584958756', 'Expediente activo.', '2021-03-03', 'master', '0.0.0.0', null, '', '');
 
 INSERT INTO `usuarios` VALUES ('100255426', 26, 35, 'Elio Isai Raymundo Diaz', 'usuario', '1234','2021-03-03', 'master', '0.0.0.0', null, '', '');
-INSERT INTO `usuarios` VALUES ('100255427', 27, 35, 'Lester Raul Toj', 'centralizador', '1234','2021-03-03', 'master', '0.0.0.0', null, '', '');
-INSERT INTO `usuarios` VALUES ('97845688595', 28, 35, 'Diego Sebastian Mijangos Flores', 'analista','1234','2021-03-03', 'master', '0.0.0.0', null, '', '');
+INSERT INTO `usuarios` VALUES ('100255427', 27, 35, 'Lester Raul Toj', 'centralizador', '1234','2021-03-03', 'master', '0.0.0.0', '2021-05-27 07:59:51', '', '');
+INSERT INTO `usuarios` VALUES ('97845688595', 28, 35, 'Diego Sebastian Mijangos Flores', 'analista','1234','2021-03-03', 'master', '0.0.0.0', '2021-05-27 07:59:51', '', '');
 INSERT INTO `usuarios` VALUES ('98511544899', 29, 35, 'Denis Ivan Santizo Pocon', 'disantizo', '1234','2021-03-03', 'master', '0.0.0.0', null, '', '');
 INSERT INTO `usuarios` VALUES ('44880459848', 30, 35, 'Madeline Yocary Coronado ', 'mycoronado', '1234','2021-03-03', 'master', '0.0.0.0', null, '', '');
-INSERT INTO `usuarios` VALUES ('94587585888', 28, 35, 'Jorge Alberto Catalan Lopez ', 'analista1', '1234','2021-03-03', 'master', '0.0.0.0', null, '', '');
+INSERT INTO `usuarios` VALUES ('94587585888', 28, 35, 'Jorge Alberto Catalan Lopez ', 'analista1', '1234','2021-03-03', 'master', '0.0.0.0', '2021-05-27 08:59:51', '', '');
 INSERT INTO `usuarios` VALUES ('10054887855', 26, 35, 'Rodrigo Saravia Saens ', 'usuario1', '1234','2021-03-03', 'master', '0.0.0.0', null, '', '');
-INSERT INTO `usuarios` VALUES ('85245689424', 27, 35, 'Manuel Perez Corrales ', 'centralizador1', '1234','2021-03-03', 'master', '0.0.0.0', null, '', '');
+INSERT INTO `usuarios` VALUES ('85245689424', 27, 35, 'Manuel Perez Corrales ', 'centralizador1', '1234','2021-03-03', 'master', '0.0.0.0', '2021-05-27 08:59:51', '', '');

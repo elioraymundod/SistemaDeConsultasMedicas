@@ -15,7 +15,7 @@ export class TrazabilidadComponent implements OnInit {
   nitLogin: any;
   codigoSolicitud: any;
   dataSource = new MatTableDataSource();
-  displayedColumns = ['codigo_solicitud', 'estado_solicitud', 'enviado_por',  'fecha', 'duracion', 'acumulado'];
+  displayedColumns = ['codigo_solicitud', 'estado_solicitud', 'enviado_por',  'fecha', 'duracion', 'acumulado', 'comentarios'];
   date: Date;
 
   constructor(private _formBuilder: FormBuilder,
@@ -40,15 +40,36 @@ export class TrazabilidadComponent implements OnInit {
       let horasAcumulado = 0;
       let minutosAcumulado = 0;
         for(let i = 0; i < res.length; i++) {
-          let fecha;
-          res[i].fecha_creacion = moment(res[i].fecha_creacion.replace('+0000', '')).format('DD-MM-YYYY HH:mm:ss')
-          fecha = moment(this.date).format('DD-MM-YYYY HH:mm:ss');
-          let dias = Math.trunc(moment(fecha).diff(res[i].fecha_creacion, 'days', true));
+          res[i].fecha_creacion = moment(res[i].fecha_creacion.replace('+0000', '')).format('YYYY-MM-DD HH:mm:ss')
+          var fecha = moment(this.date).format('YYYY-MM-DD HH:mm:ss');
+          var fecha2 = moment(res[i].fecha_creacion).format('YYYY-MM-DD HH:mm:ss')
+          console.log(this.date)
+
+          let dias = Math.trunc(moment(fecha).diff(fecha2, 'days', true));
           let horas = Math.trunc(moment(fecha).diff(res[i].fecha_creacion, 'hours', true));
-          let minutos = Math.trunc(moment(fecha).diff(res[i].fecha_creacion, 'minutes', true));
+          let minutos = Math.trunc(moment(fecha).diff(fecha2, 'minutes', true));
+
+          while(horas >= 24) {
+            horas -= 24;
+          }
+
+          while(minutos >= 60) {
+            minutos -= 60;
+          }
+
           diasAcumulado += dias;
           horasAcumulado += horas;
           minutosAcumulado += minutos;
+
+          while(minutosAcumulado >= 60){
+            minutosAcumulado -= 60;
+            horasAcumulado += 1;
+          }
+
+          while(horasAcumulado >= 24){
+            horasAcumulado -= 24;
+            diasAcumulado += 1;
+          }
           
           res[i].duracion = `Dias: ${dias}, Horas: ${horas}, Minutos: ${minutos}`
           res[i].acumulado = `Dias: ${diasAcumulado}, Horas: ${horasAcumulado}, Minutos: ${minutosAcumulado}`

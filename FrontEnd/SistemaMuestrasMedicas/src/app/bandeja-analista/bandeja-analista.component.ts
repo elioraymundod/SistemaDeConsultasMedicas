@@ -19,6 +19,7 @@ export class BandejaAnalistaComponent implements OnInit {
   dataSource = new MatTableDataSource();
   accionesFormGroup: FormGroup;
   nit: any;
+  comentarioRechazo: any;
 
   constructor(private _formBuilder: FormBuilder, private solicitudesService: SolicitudesService, private activatedRoute: ActivatedRoute, private router: Router) { 
     this.accionesFormGroup = this._formBuilder.group({
@@ -73,8 +74,32 @@ export class BandejaAnalistaComponent implements OnInit {
       case '15':
         this.router.navigate([`bandeja-analista/${this.nit}/cambio-estado/`, complementoRuta]);
         break;
+
+      case '16':
+        this.verComentarios(datos);
+      break;
+
+      case '17':
+        this.router.navigate([`bandeja-analista/${this.nit}/cambio-estado/`, complementoRuta]);
+        break;
     }
   }
+
+  fueRechazado(solicitud: any): boolean {
+    return solicitud.codigo_estado == 14;
+  }
+
+  verComentarios(solicitud: any) {
+    this.solicitudesService.getComentarioByCodigoAndEstado(solicitud.codigo_solicitud, 14).subscribe(res=> {
+      Swal.fire({
+        title: 'Comentarios por rechazo:',
+        text: `${res[0].observaciones_cambio_estado}`, 
+        icon: 'info',      
+      })
+    })
+    this.accionesFormGroup.get('opcionFormControl')?.reset()
+  }
+
 
   cerrarSesion() {
     Swal.fire({

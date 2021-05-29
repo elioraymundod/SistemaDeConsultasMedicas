@@ -182,7 +182,9 @@ export class SeguimientoSolicitudComponent implements OnInit {
   rechazar() {
     const solicitud = {
       codigo_solicitud: this.codigoSolicitud,
-      usuario_asignacion: this.usuarioCrea,
+      usuario_asignacion: this.nitAnalista,
+      usuario_anterior: this.nitAnalista,
+      revisor_anterior: this.nit,
       codigo_estado: 14,
       fecha_modificacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
       usuario_modificacion: this.nit,
@@ -195,6 +197,28 @@ export class SeguimientoSolicitudComponent implements OnInit {
         showCloseButton: true,
         showConfirmButton: false
       });
+    });
+
+    const formData = new FormData();
+          formData.append('file', this.selectedFile);
+    const historial = {
+      codigo_historial: 0,
+      codigo_solicitud: this.codigoSolicitud,
+      usuario: this.nit,
+      codigo_estado: 14,
+      fecha_creacion: this.datePipe.transform(this.date, 'yyyy-MM-dd HH:mm:ss'),
+      usuario_creacion: this.nit,
+      ip_usuario_creacion: '192.168.1.18',
+      adjunto: formData,
+      observaciones_cambio_estado: this.informacionFormGroup.get('observaciones')?.value,
+      fecha_modificacion: null,
+      usuario_modificacion: null,
+      ip_usuario_modificacion: null
+    }
+    this.solicitudesService.insertHistorial(historial).subscribe(res => {
+      console.log('se creo correctamente el historial, ', historial)
+    }, err => {
+      Swal.fire('No se pudo almacenar la solicitud', '', 'error')
     });
     this.regresarBandejaCentralizador();
   }
